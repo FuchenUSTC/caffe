@@ -76,6 +76,7 @@ template <typename Dtype>
 void BasePrefetchingDataLayer<Dtype>::InternalThreadEntry() {
 #ifndef CPU_ONLY
   cudaStream_t stream;
+  stream = NULL;
   if (Caffe::mode() == Caffe::GPU) {
     CUDA_CHECK(cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking));
   }
