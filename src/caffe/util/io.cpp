@@ -141,6 +141,48 @@ bool ReadImageToDatum(const string& filename, const int label,
     return false;
   }
 }
+
+// added by Fuchen Long to convert triplet imageset
+bool MultiImageToData(const string& filename1,
+	const string& filename2,
+	const string& filename3,
+	const int height, const int width,
+	const bool is_color,
+	Datum* datum)
+
+{
+	cv::Mat cv_img1 = ReadImageToCVMat(filename1, height, width, is_color);
+	cv::Mat cv_img2 = ReadImageToCVMat(filename2, height, width, is_color);
+	cv::Mat cv_img3 = ReadImageToCVMat(filename3, height, width, is_color);
+	if (cv_img1.data)
+	{
+		// Encode the image
+		/*if (encoding.size()){
+		std::vector<uchar> buf1;
+		std::vector<uchar> buf2;
+		std::vector<uchar> buf3;
+		std::vector<uchar> buf;
+		cv::imencode("." + encoding, cv_img1, buf1);
+		cv::imencode("." + encoding, cv_img2, buf2);
+		cv::imencode("." + encoding, cv_img3, buf3);
+		int Size;
+		Size = buf1.size() + buf2.size() + buf3.size();
+		buf.resize(Size);
+		datum->set_data(std::string(reinterpret_cast<char*>(&buf[0]),buf.size()));
+		datum->set_label(label);
+		datum->set_encoded(true);
+		return true;
+		}*/
+		// Not encode the image
+		MutiCVMatToDatum(cv_img1, cv_img2, cv_img3, datum);
+		datum->set_label(1);
+	}
+	else
+	{
+		return false;
+	}
+}
+
 #endif  // USE_OPENCV
 
 bool ReadFileToDatum(const string& filename, const int label,
@@ -235,5 +277,49 @@ void CVMatToDatum(const cv::Mat& cv_img, Datum* datum) {
   }
   datum->set_data(buffer);
 }
+
+// added by Fuchen Long for converting triplet image set 7.23.2016
+
+void MutiCVMatToDatum(const cv::Mat& cv_img1, const cv::Mat& cv_img2, const cv::Mat& cv_img3, Datum* datum)
+{
+CHECK(cv_img1.depth() == CV_8U) << "Image data type must be unsigned byte";// original image
+CHECK(cv_img2.depth() == CV_8U) << "Image data type must be unsigned byte";//similar image
+CHECK(cv_img3.depth() == CV_8U) << "Image data type must be unsigned byte";//different image
+datum->set_channels(3 * cv_img1.channels());
+datum->set_height(cv_img1.rows);
+datum->set_width(cv_img1.cols);
+datum->clear_data();
+datum->clear_float_data();
+datum->set_encoded(false);
+int datum_channels = datum->channels();
+int datum_height = datum->height();
+int datum_width = datum->width();
+int datum_size = datum_channels * datum_height * datum_width;
+std::string buffer(datum_size, ' ');
+for (int h = 0; h < datum_height; ++h)
+{
+	const uchar*ptr1 = cv_img1.ptr<uchar>(h); //original image
+	const uchar*ptr2 = cv_img2.ptr<uchar>(h);// similar image
+	const uchar*ptr3 = cv_img3.ptr<uchar>(h);// different image
+	int img_index1 = 0;
+	int img_index2 = 0;
+	int img_index3 = 0;
+	for (int w = 0; w < datum_width; ++w)
+	{
+		for (int c = 0; c < datum_channels / 3; ++c)
+		{
+			int datum_index1 = (c*datum_height + h)*datum_width + w;
+			int datum_index2 = ((3 + c)*datum_height + h)*datum_width + w;
+			int datum_index3 = ((6 + c)*datum_height + h)*datum_width + w;
+			buffer[datum_index1] = static_cast<char>(ptr1[img_index1++]);
+			buffer[datum_index2] = static_cast<char>(ptr2[img_index2++]);
+			buffer[datum_index3] = static_cast<char>(ptr3[img_index3++]);
+
+		}
+	}
+}
+datum->set_data(buffer);
+}
+
 #endif  // USE_OPENCV
 }  // namespace caffe

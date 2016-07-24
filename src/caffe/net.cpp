@@ -858,9 +858,38 @@ void Net<Dtype>::ToProto(NetParameter* param, bool write_diff) const {
   param->set_name(name_);
   // Add bottom and top
   DLOG(INFO) << "Serializing " << layers_.size() << " layers";
+  for (int i = 0; i < net_input_blob_indices_.size(); ++i)
+	  param->add_input(blob_names_[net_input_blob_indices_[i]]);
+  //for (int i = 0; i < layers_.size(); ++i) {
+  //  LayerParameter* layer_param = param->add_layer();
+  //  layers_[i]->ToProto(layer_param, write_diff);
+  //}
+
+  // added by Fuchen Long for only saving the parameter in
+  // one stream, not all share parameter
+
+  // check the parameter owner
   for (int i = 0; i < layers_.size(); ++i) {
-    LayerParameter* layer_param = param->add_layer();
-    layers_[i]->ToProto(layer_param, write_diff);
+	  bool no_need_snapshot = true;
+	  vector<int> param_list = param_id_vecs_[i];
+	  for (int j = 0; j < param_list.size(); j++){
+		  int param_idx = param_list[j];
+		  if (param_owners_[param_idx] < 0){
+			  no_need_snapshot = false;
+			  break;
+		  }
+	  }
+
+	  LayerParameter* layer_param = param->add_layer();
+	  for (int j = 0; j < bottom_id_vecs_[i].size(); ++j) {
+		  layer_param->add_bottom(blob_names_[bottom_id_vecs_[i][j]]);
+	  }
+	  for (int j = 0; j < top_id_vecs_[i].size(); ++j) {
+		  layer_param->add_top(blob_names_[top_id_vecs_[i][j]]);
+	  }
+
+	  if (no_need_snapshot) continue;
+	  layers_[i]->ToProto(layer_param, write_diff);
   }
 }
 
