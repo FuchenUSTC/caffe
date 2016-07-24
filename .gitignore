@@ -1,9 +1,9 @@
 ## General
 
 # 3rdparty caffe bin
-3rdparty/
-caffe/
-bin/
+/3rdparty/
+/caffe/
+/bin/
 
 # Compiled Object files
 *.slo
@@ -21,8 +21,6 @@ bin/
 *.a
 
 # Compiled protocol buffers
-*.pb.h
-*.pb.cc
 *_pb2.py
 
 # Compiled python
