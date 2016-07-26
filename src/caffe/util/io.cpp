@@ -356,19 +356,39 @@ void PairCVMatToDatum(const cv::Mat& cv_img1, const cv::Mat& cv_img2,
 		const uchar*ptr2 = cv_img2.ptr<uchar>(h);// different image
 		int img_index1 = 0;
 		int img_index2 = 0;
-		for (int w = 0; w < datum_width; ++w)
-		{
-			for (int c = 0; c < datum_channels / 2; ++c)
-			{
+		for (int w = 0; w < datum_width; ++w){
+			for (int c = 0; c < datum_channels / 2; ++c){
 				int datum_index1 = (c*datum_height + h)*datum_width + w;
 				int datum_index2 = ((3 + c)*datum_height + h)*datum_width + w;
 				buffer[datum_index1] = static_cast<char>(ptr1[img_index1++]);
 				buffer[datum_index2] = static_cast<char>(ptr2[img_index2++]);
-
 			}
 		}
 	}
 	datum->set_data(buffer);
+	// test the pairwise data
+	// show the image
+
+	//cv::Mat query_img(datum_height, datum_width, CV_8UC3);
+	//cv::Mat diffe_img(datum_height, datum_width, CV_8UC3);
+	//for (int h = 0; h < datum_height; ++h){
+	//	uchar* ptr_query = query_img.ptr<uchar>(h);
+	//	uchar* ptr_diff = diffe_img.ptr<uchar>(h);
+	//	int query_index1 = 0;
+	//	int query_index2 = 0;
+	//	for (int w = 0; w < datum_width; ++w){
+	//		for (int c = 0; c < 3; ++c){
+	//			int index = (c*datum_height + h)*datum_width + w;
+	//			ptr_query[query_index1++] = buffer[index];
+	//			int index_d = ((c + 3)*datum_height + h)*datum_width + w;
+	//			ptr_diff[query_index2++] = buffer[index_d];
+	//		}
+	//	}
+	//}
+	//cv::imshow("query image show", query_img);
+	//cv::waitKey();
+	//cv::imshow("different image show", diffe_img);
+	//cv::waitKey();
 }
 
 #endif  // USE_OPENCV

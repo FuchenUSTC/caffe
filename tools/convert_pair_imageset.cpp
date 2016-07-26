@@ -58,7 +58,6 @@ int main(int argc, char** argv) {
 #ifndef GFLAGS_GFLAGS_H_
 	namespace gflags = google;
 #endif
-
 	gflags::SetUsageMessage("Convert a set of images to the leveldb/lmdb\n"
 		"format used as input for Caffe.\n"
 		"Usage:\n"
