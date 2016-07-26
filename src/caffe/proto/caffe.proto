@@ -403,6 +403,7 @@ message LayerParameter {
   optional ThresholdParameter threshold_param = 128;
   optional TileParameter tile_param = 138;
   optional TripletRankingHingeLossParameter triplet_ranking_hinge_loss_param = 151;
+  optional PairWiseClipHingeLossParameter pairwise_clip_hinge_loss_param = 152;
   optional WindowDataParameter window_data_param = 129;
 }
 
@@ -1123,6 +1124,19 @@ message TripletRankingHingeLossParameter{
    optional float margin = 2 [default = 1];
 }
 
+// Message that stores parameters used by PairWiseClipHingeLossLayer
+message PairWiseClipHingeLossParameter{
+  //Dimension for computing
+  optional int32 dim = 1 [default = 10];
+  //Margin
+  optional float margin = 2 [default = 1];
+  //Frame number each Clip
+  optional int32 frame_num = 3 [default = 7];
+  //Lamda for leverage the influence betweent 
+  //Structure loss and triplet loss
+  optional float lamda = 4 [default = 0.5];
+}
+
 // Message that stores parameters used by SoftmaxLayer, SoftmaxWithLossLayer
 message SoftmaxParameter {
   enum Engine {
@@ -1259,6 +1273,7 @@ message V1LayerParameter {
     WINDOW_DATA = 24;
     THRESHOLD = 31;
 	TRIPLET_RANKING_HINGE_LOSS=40;
+	PAIRWISE_CLIP_HINGE_LOSS=41;
   }
   optional LayerType type = 5;
   repeated BlobProto blobs = 6;
@@ -1302,6 +1317,7 @@ message V1LayerParameter {
   optional TransformationParameter transform_param = 36;
   optional LossParameter loss_param = 42;
   optional TripletRankingHingeLossParameter triplet_ranking_hinge_loss_param = 43;
+  optional PairWiseClipHingeLossParameter pairwise_clip_hinge_loss_param = 44;
   optional V0LayerParameter layer = 1;
 }
 

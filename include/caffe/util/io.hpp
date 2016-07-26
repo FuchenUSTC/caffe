@@ -112,6 +112,10 @@ bool MultiImageToData(const string& filename1,
 	const int height, const int width, const bool is_color,
 	Datum* datum);
 
+bool PairImageToData(const string& filename1, const string& filename2,
+	const int height, const int width, const bool is_color,
+	Datum* datum);
+
 inline bool ReadImageToDatum(const string& filename, const int label,
     const int height, const int width, Datum* datum) {
   return ReadImageToDatum(filename, label, height, width, true, datum);
@@ -153,6 +157,8 @@ cv::Mat DecodeDatumToCVMat(const Datum& datum, bool is_color);
 void CVMatToDatum(const cv::Mat& cv_img, Datum* datum);
 
 void MutiCVMatToDatum(const cv::Mat& cv_img1, const cv::Mat& cv_img2, const cv::Mat& cv_img3, Datum* datum);
+
+void PairCVMatToDatum(const cv::Mat& cv_img1, const cv::Mat& cv_img2, Datum* datum);
 #endif  // USE_OPENCV
 
 }  // namespace caffe
