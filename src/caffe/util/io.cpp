@@ -184,13 +184,15 @@ bool MultiImageToData(const string& filename1,
 }
 
 // added by Fuchen Long to convert pair imageset
-bool PairImageToData(const string& filename1, const string& filename2,
-	const int height, const int width, const bool is_color, Datum* datum){
+bool PairImageToData(const string& filename1, const string& filename2, 
+	const string& vision_flag, const int height, const int width, 
+	const bool is_color, Datum* datum){
 	cv::Mat cv_img1 = ReadImageToCVMat(filename1, height, width, is_color);
 	cv::Mat cv_img2 = ReadImageToCVMat(filename2, height, width, is_color);
 	if (cv_img1.data){
 		PairCVMatToDatum(cv_img1, cv_img2, datum);
-		datum->set_label(1);
+		int label = atoi(vision_flag.c_str()); // different pair: 0, similar pair: 1
+		datum->set_label(label);
 	}
 	else return false;
 }

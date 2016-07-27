@@ -22,8 +22,9 @@ namespace caffe{
 	class PairWiseClipHingeLossLayerTest: public MultiDeviceTest<TypeParam>{
 	protected:
 		PairWiseClipHingeLossLayerTest()
-			:blob_bottom_data_original_(new Blob<Dtype>(14, 48, 1, 1)),
-			blob_bottom_data_different_(new Blob<Dtype>(14, 48, 1, 1)),
+			:blob_bottom_data_original_(new Blob<Dtype>(12, 48, 1, 1)),
+			blob_bottom_data_different_(new Blob<Dtype>(12, 48, 1, 1)),
+			blob_bottom_vision_flag_(new Blob<Dtype>(12,1,1,1)),
 			blob_top_loss_(new Blob<Dtype>()){
 			//File the value in the original, similar and different layer
 			FillerParameter filler_param;
@@ -34,6 +35,16 @@ namespace caffe{
 			//different
 			filler.Fill(this->blob_bottom_data_different_);
 			blob_bottom_vec_.push_back(blob_bottom_data_different_);
+
+			//similar vision flag
+			for (int i = 0; i < 6; ++i)
+				blob_bottom_vision_flag_->mutable_cpu_data()[i]
+				= 1;
+			for (int i = 6; i < 12; ++i)
+				blob_bottom_vision_flag_->mutable_cpu_data()[i]
+				= 0;
+			blob_bottom_vec_.push_back(blob_bottom_vision_flag_);
+
 			//top loss
 			blob_top_vec_.push_back(blob_top_loss_);
 		}
@@ -41,6 +52,7 @@ namespace caffe{
 		virtual ~PairWiseClipHingeLossLayerTest(){
 			delete blob_bottom_data_original_;
 			delete blob_bottom_data_different_;
+			delete blob_bottom_vision_flag_;
 			delete blob_top_loss_;
 		}
 
@@ -51,9 +63,9 @@ namespace caffe{
 			PairWiseClipHingeLossParameter* pairwise_clip_hinge_loss_param
 				= layer_param.mutable_pairwise_clip_hinge_loss_param();
 			pairwise_clip_hinge_loss_param->set_dim(48);
-			pairwise_clip_hinge_loss_param->set_frame_num(7);
-			pairwise_clip_hinge_loss_param->set_margin(10);
-			pairwise_clip_hinge_loss_param->set_lamda(0.5);
+			pairwise_clip_hinge_loss_param->set_frame_num(3);
+			pairwise_clip_hinge_loss_param->set_margin(32);
+			pairwise_clip_hinge_loss_param->set_lamda(1);
 			PairWiseClipHingeLossLayer<Dtype> layer_weight_1(layer_param);
 			layer_weight_1.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
 			const Dtype loss_weight_1 =
@@ -76,6 +88,7 @@ namespace caffe{
 
 		Blob<Dtype>* const blob_bottom_data_original_;
 		Blob<Dtype>* const blob_bottom_data_different_;
+		Blob<Dtype>* const blob_bottom_vision_flag_;
 		Blob<Dtype>* const blob_top_loss_;
 		vector<Blob<Dtype>*> blob_bottom_vec_;
 		vector<Blob<Dtype>*> blob_top_vec_;
@@ -95,9 +108,9 @@ namespace caffe{
 		PairWiseClipHingeLossParameter* pairwise_clip_hinge_loss_param
 			= layer_param.mutable_pairwise_clip_hinge_loss_param();
 		pairwise_clip_hinge_loss_param->set_dim(48);
-		pairwise_clip_hinge_loss_param->set_frame_num(7);
-		pairwise_clip_hinge_loss_param->set_margin(10);
-		pairwise_clip_hinge_loss_param->set_lamda(0.5);
+		pairwise_clip_hinge_loss_param->set_frame_num(3);
+		pairwise_clip_hinge_loss_param->set_margin(32);
+		pairwise_clip_hinge_loss_param->set_lamda(1);
 		PairWiseClipHingeLossLayer<Dtype> layer(layer_param);
 		layer.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
 		GradientChecker<Dtype> checker(1e-2, 1e-2, 1701);

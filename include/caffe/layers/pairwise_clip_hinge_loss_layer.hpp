@@ -26,10 +26,10 @@ public:
 		:LossLayer<Dtype>(param), diff_() {}
 	virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
 		const vector<Blob<Dtype>*>& top);
-	virtual inline int ExactNumBottomBlobs() const { return 2; }
+	virtual inline int ExactNumBottomBlobs() const { return 3; }
 	virtual inline const char* type() const { return "PairWiseClipHingeLoss"; }
 	virtual inline bool AllowForceBackward(const int bottom_index) const {
-		return bottom_index != 2;
+		return bottom_index != 3;
 	}
 
 protected:
@@ -39,7 +39,7 @@ protected:
 		const vector<bool>& propagate_dowm, const vector<Blob<Dtype>*>& bottom);
 
 	void average_hashing(const vector<Blob<Dtype>*>& bottom);
-	Dtype compute_pairwiseloss(int batchsize, int Dimv);
+	Dtype compute_pairwiseloss(int batchsize, int Dimv, const vector<Blob<Dtype>*>& bottom);
 	Dtype compute_structureloss(const vector<Blob<Dtype>*>& bottom);
 	void compute_gradient_structure(int index, int hash_pos);
 
@@ -55,7 +55,7 @@ protected:
 	Blob<Dtype> ave_or, ave_di; // Aver(F,F-)
 	Blob<Dtype> sub_or, sub_di; // Subcessive(F,F-)
 	Blob<Dtype> pow_sub_or, pow_sub_di; // PowX(sub(F,F-))
-	Blob<Dtype> gradient_triplet;
+	Blob<Dtype> gradient_pairwise;
 	Blob<Dtype> gradient_structure;
 	Blob<Dtype> gradient;
 };

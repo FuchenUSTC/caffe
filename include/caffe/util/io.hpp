@@ -112,7 +112,7 @@ bool MultiImageToData(const string& filename1,
 	const int height, const int width, const bool is_color,
 	Datum* datum);
 
-bool PairImageToData(const string& filename1, const string& filename2,
+bool PairImageToData(const string& filename1, const string& filename2, const string& vision_flag,
 	const int height, const int width, const bool is_color,
 	Datum* datum);
 

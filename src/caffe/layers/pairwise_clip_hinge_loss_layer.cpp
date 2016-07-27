@@ -24,10 +24,13 @@ namespace caffe{
 		CHECK_EQ((bottom[0]->num()) % frame_num, 0) <<
 			"PAIRWISE_CLIP_HINGE_LOSS_LAYER: the batchsize must div frame_num.";
 
+		CHECK_EQ((bottom[2]->num()), batch*frame_num) <<
+			"PAIRWISE_CLIP_HINGE_LOSS_LAYER: the vision_similar_tag must have the same dim with video_num.";
+
 		diff_.Reshape(batch, 1, 1, 1);
 		dist_sq_.Reshape(batch, 1, 1, 1);
-		diff_sub_or_di.Reshape(bottom[0]->num(), bottom[0]->channels(), 1, 1); // F-F-
-		diff_pow_or_di.Reshape(bottom[0]->num(), bottom[0]->channels(), 1, 1); // Pow (F-F-)
+		diff_sub_or_di.Reshape(batch, bottom[0]->channels(), 1, 1); // F-F-
+		diff_pow_or_di.Reshape(batch, bottom[0]->channels(), 1, 1); // Pow (F-F-)
 		ave_or.Reshape(batch, bottom[0]->channels(), 1, 1);// Ave(F)
 		ave_di.Reshape(batch, bottom[0]->channels(), 1, 1);// Ave(F-)
 		sub_or.Reshape(batch*(frame_num - 1), bottom[0]->channels(), 1, 1);// SUB(F)
@@ -35,7 +38,7 @@ namespace caffe{
 		pow_sub_or.Reshape(batch*(frame_num - 1), bottom[0]->channels(), 1, 1);// PowSUB(F)
 		pow_sub_di.Reshape(batch*(frame_num - 1), bottom[0]->channels(), 1, 1);// PowSUB(F-)
 
-		gradient_triplet.Reshape(1, bottom[0]->channels(), 1, 1);
+		gradient_pairwise.Reshape(1, bottom[0]->channels(), 1, 1);
 		gradient_structure.Reshape(1, bottom[0]->channels(), 1, 1);
 		gradient.Reshape(1, bottom[0]->channels(), 1, 1);
 	}
@@ -62,7 +65,8 @@ namespace caffe{
 
 	template<typename Dtype>
 	Dtype PairWiseClipHingeLossLayer<Dtype>::compute_pairwiseloss(
-		int batchsize, int Dimv){
+		int batchsize, int Dimv,
+		const vector<Blob<Dtype>*>& bottom){
 		Dtype PairWiseLossTotal(0.0);
 		const Dtype* sub_or_di;
 		// The pairwise ranking
@@ -72,7 +76,10 @@ namespace caffe{
 			sub_or_di = diff_pow_or_di.cpu_data() + diff_pow_or_di.offset(n);
 			Dtype diff = caffe_cpu_asum(dim, sub_or_di);
 			Dtype loss(0.0);
-			loss = std::max(margin - diff, Dtype(0));
+			if (bottom[2]->cpu_data()[n*frame_num] == 0)
+				loss = std::max(margin - diff, Dtype(0));
+			else
+				loss = diff;
 			diff_.mutable_cpu_data()[n] = loss; // save the loss[i]
 		}
 		for (int k = 0; k < batchsize; ++k){
@@ -160,7 +167,7 @@ namespace caffe{
 		average_hashing(bottom);
 
 		// PairWise Loss
-		PairWiseClipLossTotal = compute_pairwiseloss(batch, Dimv);
+		PairWiseClipLossTotal = compute_pairwiseloss(batch, Dimv,bottom);
 
 		// The structure loss
 		StructureLoss = compute_structureloss(bottom);
@@ -183,38 +190,50 @@ namespace caffe{
 				int channels = bottom[i]->channels();
 				for (int j = 0; j < num; ++j){
 					Dtype* bout = bottom[i]->mutable_cpu_diff();// get the 3 bottoms' address, the i th bottom's address
-					orignalcode = ave_or.cpu_data() + (j / num)*dim;
-					diffrcode = ave_di.cpu_data() + (j / num)*dim;
+					orignalcode = ave_or.cpu_data() + (j / frame_num)*dim;
+					diffrcode = ave_di.cpu_data() + (j / frame_num)*dim;
 					if (i == 0){
-						if (dist_sq_.cpu_data()[j / frame_num]>Dtype(0.0)){
-							caffe_sub(dim, diffrcode, orignalcode,
-								gradient_triplet.mutable_cpu_data());// the distance of F and F-
+						if (bottom[2]->cpu_data()[j] == 1){
+							caffe_sub(dim, orignalcode, diffrcode,
+								gradient_pairwise.mutable_cpu_data());
 							caffe_scal(dim, Dtype(2) / Dtype(num),
-								gradient_triplet.mutable_cpu_data());
+								gradient_pairwise.mutable_cpu_data());
+						}
+						else if (dist_sq_.cpu_data()[j / frame_num] > Dtype(0.0)){
+							caffe_sub(dim, diffrcode, orignalcode,
+								gradient_pairwise.mutable_cpu_data());// the distance of F and F-
+							caffe_scal(dim, Dtype(2) / Dtype(num),
+								gradient_pairwise.mutable_cpu_data());
 						}
 						else
-							caffe_sub(dim, orignalcode, orignalcode,
-							gradient_triplet.mutable_cpu_data());
+							caffe_set(dim, Dtype(0.0),
+							gradient_pairwise.mutable_cpu_data());
 						compute_gradient_structure(i, j);
-						caffe_scal(dim, lamda, gradient_triplet.mutable_cpu_data());
+						caffe_scal(dim, lamda, gradient_pairwise.mutable_cpu_data());
 						caffe_scal(dim, Dtype(1.0) - lamda, gradient_structure.mutable_cpu_data());
-						caffe_add(dim, gradient_triplet.cpu_data(),
+						caffe_add(dim, gradient_pairwise.cpu_data(),
 							gradient_structure.cpu_data(), gradient.mutable_cpu_data());
 					}
 					if (i == 1){
-						if (dist_sq_.cpu_data()[j / frame_num] > Dtype(0.0)){
-							caffe_sub(dim, orignalcode, diffrcode,
-								gradient_triplet.mutable_cpu_data());
+						if (bottom[2]->cpu_data()[j] == 1){
+							caffe_sub(dim, diffrcode, orignalcode,
+								gradient_pairwise.mutable_cpu_data());
 							caffe_scal(dim, Dtype(2) / Dtype(num),
-								gradient_triplet.mutable_cpu_data());
+								gradient_pairwise.mutable_cpu_data());
+						}
+						else if (dist_sq_.cpu_data()[j / frame_num] > Dtype(0.0)){
+							caffe_sub(dim, orignalcode, diffrcode,
+								gradient_pairwise.mutable_cpu_data());
+							caffe_scal(dim, Dtype(2) / Dtype(num),
+								gradient_pairwise.mutable_cpu_data());
 						}
 						else
-							caffe_sub(dim, diffrcode, diffrcode,
-							gradient_triplet.mutable_cpu_data());
+							caffe_set(dim, Dtype(0.0),
+							gradient_pairwise.mutable_cpu_data());
 						compute_gradient_structure(i, j);
-						caffe_scal(dim, lamda, gradient_triplet.mutable_cpu_data());
+						caffe_scal(dim, lamda, gradient_pairwise.mutable_cpu_data());
 						caffe_scal(dim, Dtype(1.0) - lamda, gradient_structure.mutable_cpu_data());
-						caffe_add(dim, gradient_triplet.cpu_data(),
+						caffe_add(dim, gradient_pairwise.cpu_data(),
 							gradient_structure.cpu_data(), gradient.mutable_cpu_data());
 					}
 					caffe_scal(dim, Dtype(2.0), gradient.mutable_cpu_data());

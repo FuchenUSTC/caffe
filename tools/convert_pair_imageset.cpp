@@ -5,7 +5,7 @@
 //
 // where ROOTFOLDER is the root folder that holds all the images, and LISTFILE
 // should be a list of triplet files each line, in the format as
-//   Pic1.jpg Pic2.jpg
+//   Pic1.jpg Pic2.jpg vision_flag(0 different 1 similar)
 //   ....
 
 
@@ -80,16 +80,19 @@ int main(int argc, char** argv) {
 	int NumberPair = atoi(argv[4]);
 	std::vector<string> lines1;
 	std::vector<string> lines2;
-	std::vector<string> filename;
+	std::vector<string> vision_flag;
 	std::string filename1;
 	std::string filename2;
+	std::string vision_f_;
 	int i = 0;
 	for (int k = 0; k < NumberPair; k++) //change the number to fit your size
 	{
 		infile >> filename1;
 		infile >> filename2;
+		infile >> vision_f_;
 		lines1.push_back(filename1); // original image
 		lines2.push_back(filename2); // different image
+		vision_flag.push_back(vision_f_);// vision similar flag
 		i++;
 		if (i % 1000 == 0)
 			LOG(INFO) << "have load " << i << " pair lines.\n";
@@ -127,7 +130,7 @@ int main(int argc, char** argv) {
 	for (int line_id = 0; line_id < lines1.size(); ++line_id) {
 		bool status;
 		status = PairImageToData(root_folder + lines1[line_id],
-			root_folder + lines2[line_id],
+			root_folder + lines2[line_id], vision_flag[line_id],
 			resize_height, resize_width,
 			is_color, &datum);
 		if (status == false) continue;
