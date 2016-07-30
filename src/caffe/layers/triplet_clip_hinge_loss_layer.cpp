@@ -94,7 +94,7 @@ namespace caffe {
 			result1 = caffe_cpu_asum(dim, sub_or_si);
 			result2 = caffe_cpu_asum(dim, sub_or_di);
 			Dtype loss(0.0);
-			loss = std::max(margin + result1 - result2, Dtype(0));// compute the loss
+			loss = std::max(margin + result1 - result2, Dtype(FLT_MIN));// compute the loss
 			diff_.mutable_cpu_data()[n] = loss; // save the loss[i]
 		}
 		for (int k = 0; k < batchsize; k++)
@@ -240,14 +240,14 @@ namespace caffe {
 					similarcode = ave_si.cpu_data() + (j / frame_num)*dim;
 					diffrcode = ave_di.cpu_data() + (j / frame_num)*dim;
 					if (i == 0){
-						if (dist_sq_.cpu_data()[j / frame_num]>Dtype(0.0)){
+						if (dist_sq_.cpu_data()[j / frame_num]>Dtype(FLT_MIN)){
 							caffe_sub(dim, diffrcode, similarcode,
 								gradient_triplet.mutable_cpu_data());// the distance of F- and F+
 							caffe_scal(dim, Dtype(2) / Dtype(num),
 								gradient_triplet.mutable_cpu_data());
 						}
 						else
-							caffe_set(dim, Dtype(0.0),
+							caffe_set(dim, Dtype(FLT_MIN),
 							gradient_triplet.mutable_cpu_data());
 						compute_gradient_structure(i, j);
 						caffe_scal(dim, lamda, gradient_triplet.mutable_cpu_data());
@@ -256,14 +256,14 @@ namespace caffe {
 							gradient_structure.cpu_data(), gradient.mutable_cpu_data());
 					}
 					if (i == 1){
-						if (dist_sq_.cpu_data()[j / frame_num] > Dtype(0.0)){
+						if (dist_sq_.cpu_data()[j / frame_num] > Dtype(FLT_MIN)){
 							caffe_sub(dim, similarcode, orignalcode,
 								gradient_triplet.mutable_cpu_data());// the distance of F+ and F
 							caffe_scal(dim, Dtype(2) / Dtype(num),
 								gradient_triplet.mutable_cpu_data());
 						}
 						else
-							caffe_set(dim, Dtype(0.0),
+							caffe_set(dim, Dtype(FLT_MIN),
 							gradient_triplet.mutable_cpu_data());
 						compute_gradient_structure(i, j);
 						caffe_scal(dim, lamda, gradient_triplet.mutable_cpu_data());
@@ -272,14 +272,14 @@ namespace caffe {
 							gradient_structure.cpu_data(), gradient.mutable_cpu_data());
 					}
 					if (i == 2){
-						if (dist_sq_.cpu_data()[j / frame_num] > Dtype(0.0)){
+						if (dist_sq_.cpu_data()[j / frame_num] > Dtype(FLT_MIN)){
 							caffe_sub(dim, orignalcode, diffrcode,
 								gradient_triplet.mutable_cpu_data());
 							caffe_scal(dim, Dtype(2) / Dtype(num),
 								gradient_triplet.mutable_cpu_data());
 						}
 						else
-							caffe_set(dim, Dtype(0.0),
+							caffe_set(dim, Dtype(FLT_MIN),
 							gradient_triplet.mutable_cpu_data());
 						compute_gradient_structure(i, j);
 						caffe_scal(dim, lamda, gradient_triplet.mutable_cpu_data());
