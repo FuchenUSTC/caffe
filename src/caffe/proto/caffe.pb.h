@@ -93,6 +93,7 @@ class SoftmaxParameter;
 class TanHParameter;
 class TileParameter;
 class ThresholdParameter;
+class VideoTemporalPoolingParameter;
 class WindowDataParameter;
 class SPPParameter;
 class V1LayerParameter;
@@ -548,6 +549,7 @@ enum V1LayerParameter_LayerType {
   V1LayerParameter_LayerType_MVN = 34,
   V1LayerParameter_LayerType_POOLING = 17,
   V1LayerParameter_LayerType_POWER = 26,
+  V1LayerParameter_LayerType_PAIRWISE_CLIP_HINGE_LOSS = 41,
   V1LayerParameter_LayerType_RELU = 18,
   V1LayerParameter_LayerType_SIGMOID = 19,
   V1LayerParameter_LayerType_SIGMOID_CROSS_ENTROPY_LOSS = 27,
@@ -557,11 +559,10 @@ enum V1LayerParameter_LayerType {
   V1LayerParameter_LayerType_SPLIT = 22,
   V1LayerParameter_LayerType_SLICE = 33,
   V1LayerParameter_LayerType_TANH = 23,
-  V1LayerParameter_LayerType_WINDOW_DATA = 24,
   V1LayerParameter_LayerType_THRESHOLD = 31,
   V1LayerParameter_LayerType_TRIPLET_RANKING_HINGE_LOSS = 40,
-  V1LayerParameter_LayerType_PAIRWISE_CLIP_HINGE_LOSS = 41,
-  V1LayerParameter_LayerType_TRIPLET_CLIP_HINGE_LOSS = 42
+  V1LayerParameter_LayerType_TRIPLET_CLIP_HINGE_LOSS = 42,
+  V1LayerParameter_LayerType_WINDOW_DATA = 24
 };
 bool V1LayerParameter_LayerType_IsValid(int value);
 const V1LayerParameter_LayerType V1LayerParameter_LayerType_LayerType_MIN = V1LayerParameter_LayerType_NONE;
@@ -3190,14 +3191,14 @@ class LayerParameter : public ::google::protobuf::Message {
   inline ::caffe::TileParameter* release_tile_param();
   inline void set_allocated_tile_param(::caffe::TileParameter* tile_param);
 
-  // optional .caffe.TripletRankingHingeLossParameter triplet_ranking_hinge_loss_param = 151;
-  inline bool has_triplet_ranking_hinge_loss_param() const;
-  inline void clear_triplet_ranking_hinge_loss_param();
-  static const int kTripletRankingHingeLossParamFieldNumber = 151;
-  inline const ::caffe::TripletRankingHingeLossParameter& triplet_ranking_hinge_loss_param() const;
-  inline ::caffe::TripletRankingHingeLossParameter* mutable_triplet_ranking_hinge_loss_param();
-  inline ::caffe::TripletRankingHingeLossParameter* release_triplet_ranking_hinge_loss_param();
-  inline void set_allocated_triplet_ranking_hinge_loss_param(::caffe::TripletRankingHingeLossParameter* triplet_ranking_hinge_loss_param);
+  // optional .caffe.WindowDataParameter window_data_param = 129;
+  inline bool has_window_data_param() const;
+  inline void clear_window_data_param();
+  static const int kWindowDataParamFieldNumber = 129;
+  inline const ::caffe::WindowDataParameter& window_data_param() const;
+  inline ::caffe::WindowDataParameter* mutable_window_data_param();
+  inline ::caffe::WindowDataParameter* release_window_data_param();
+  inline void set_allocated_window_data_param(::caffe::WindowDataParameter* window_data_param);
 
   // optional .caffe.PairWiseClipHingeLossParameter pairwise_clip_hinge_loss_param = 152;
   inline bool has_pairwise_clip_hinge_loss_param() const;
@@ -3208,6 +3209,15 @@ class LayerParameter : public ::google::protobuf::Message {
   inline ::caffe::PairWiseClipHingeLossParameter* release_pairwise_clip_hinge_loss_param();
   inline void set_allocated_pairwise_clip_hinge_loss_param(::caffe::PairWiseClipHingeLossParameter* pairwise_clip_hinge_loss_param);
 
+  // optional .caffe.TripletRankingHingeLossParameter triplet_ranking_hinge_loss_param = 151;
+  inline bool has_triplet_ranking_hinge_loss_param() const;
+  inline void clear_triplet_ranking_hinge_loss_param();
+  static const int kTripletRankingHingeLossParamFieldNumber = 151;
+  inline const ::caffe::TripletRankingHingeLossParameter& triplet_ranking_hinge_loss_param() const;
+  inline ::caffe::TripletRankingHingeLossParameter* mutable_triplet_ranking_hinge_loss_param();
+  inline ::caffe::TripletRankingHingeLossParameter* release_triplet_ranking_hinge_loss_param();
+  inline void set_allocated_triplet_ranking_hinge_loss_param(::caffe::TripletRankingHingeLossParameter* triplet_ranking_hinge_loss_param);
+
   // optional .caffe.TripletClipHingeLossParameter triplet_clip_hinge_loss_param = 153;
   inline bool has_triplet_clip_hinge_loss_param() const;
   inline void clear_triplet_clip_hinge_loss_param();
@@ -3217,14 +3227,14 @@ class LayerParameter : public ::google::protobuf::Message {
   inline ::caffe::TripletClipHingeLossParameter* release_triplet_clip_hinge_loss_param();
   inline void set_allocated_triplet_clip_hinge_loss_param(::caffe::TripletClipHingeLossParameter* triplet_clip_hinge_loss_param);
 
-  // optional .caffe.WindowDataParameter window_data_param = 129;
-  inline bool has_window_data_param() const;
-  inline void clear_window_data_param();
-  static const int kWindowDataParamFieldNumber = 129;
-  inline const ::caffe::WindowDataParameter& window_data_param() const;
-  inline ::caffe::WindowDataParameter* mutable_window_data_param();
-  inline ::caffe::WindowDataParameter* release_window_data_param();
-  inline void set_allocated_window_data_param(::caffe::WindowDataParameter* window_data_param);
+  // optional .caffe.VideoTemporalPoolingParameter video_temporal_pooling_param = 154;
+  inline bool has_video_temporal_pooling_param() const;
+  inline void clear_video_temporal_pooling_param();
+  static const int kVideoTemporalPoolingParamFieldNumber = 154;
+  inline const ::caffe::VideoTemporalPoolingParameter& video_temporal_pooling_param() const;
+  inline ::caffe::VideoTemporalPoolingParameter* mutable_video_temporal_pooling_param();
+  inline ::caffe::VideoTemporalPoolingParameter* release_video_temporal_pooling_param();
+  inline void set_allocated_video_temporal_pooling_param(::caffe::VideoTemporalPoolingParameter* video_temporal_pooling_param);
 
   // @@protoc_insertion_point(class_scope:caffe.LayerParameter)
  private:
@@ -3326,14 +3336,16 @@ class LayerParameter : public ::google::protobuf::Message {
   inline void clear_has_threshold_param();
   inline void set_has_tile_param();
   inline void clear_has_tile_param();
-  inline void set_has_triplet_ranking_hinge_loss_param();
-  inline void clear_has_triplet_ranking_hinge_loss_param();
-  inline void set_has_pairwise_clip_hinge_loss_param();
-  inline void clear_has_pairwise_clip_hinge_loss_param();
-  inline void set_has_triplet_clip_hinge_loss_param();
-  inline void clear_has_triplet_clip_hinge_loss_param();
   inline void set_has_window_data_param();
   inline void clear_has_window_data_param();
+  inline void set_has_pairwise_clip_hinge_loss_param();
+  inline void clear_has_pairwise_clip_hinge_loss_param();
+  inline void set_has_triplet_ranking_hinge_loss_param();
+  inline void clear_has_triplet_ranking_hinge_loss_param();
+  inline void set_has_triplet_clip_hinge_loss_param();
+  inline void clear_has_triplet_clip_hinge_loss_param();
+  inline void set_has_video_temporal_pooling_param();
+  inline void clear_has_video_temporal_pooling_param();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -3394,10 +3406,11 @@ class LayerParameter : public ::google::protobuf::Message {
   ::caffe::TanHParameter* tanh_param_;
   ::caffe::ThresholdParameter* threshold_param_;
   ::caffe::TileParameter* tile_param_;
-  ::caffe::TripletRankingHingeLossParameter* triplet_ranking_hinge_loss_param_;
-  ::caffe::PairWiseClipHingeLossParameter* pairwise_clip_hinge_loss_param_;
-  ::caffe::TripletClipHingeLossParameter* triplet_clip_hinge_loss_param_;
   ::caffe::WindowDataParameter* window_data_param_;
+  ::caffe::PairWiseClipHingeLossParameter* pairwise_clip_hinge_loss_param_;
+  ::caffe::TripletRankingHingeLossParameter* triplet_ranking_hinge_loss_param_;
+  ::caffe::TripletClipHingeLossParameter* triplet_clip_hinge_loss_param_;
+  ::caffe::VideoTemporalPoolingParameter* video_temporal_pooling_param_;
   int phase_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_caffe_2eproto();
@@ -8892,6 +8905,85 @@ class ThresholdParameter : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class VideoTemporalPoolingParameter : public ::google::protobuf::Message {
+ public:
+  VideoTemporalPoolingParameter();
+  virtual ~VideoTemporalPoolingParameter();
+
+  VideoTemporalPoolingParameter(const VideoTemporalPoolingParameter& from);
+
+  inline VideoTemporalPoolingParameter& operator=(const VideoTemporalPoolingParameter& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const VideoTemporalPoolingParameter& default_instance();
+
+  void Swap(VideoTemporalPoolingParameter* other);
+
+  // implements Message ----------------------------------------------
+
+  VideoTemporalPoolingParameter* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const VideoTemporalPoolingParameter& from);
+  void MergeFrom(const VideoTemporalPoolingParameter& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional uint32 frame_num = 1;
+  inline bool has_frame_num() const;
+  inline void clear_frame_num();
+  static const int kFrameNumFieldNumber = 1;
+  inline ::google::protobuf::uint32 frame_num() const;
+  inline void set_frame_num(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:caffe.VideoTemporalPoolingParameter)
+ private:
+  inline void set_has_frame_num();
+  inline void clear_has_frame_num();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 frame_num_;
+  friend void  protobuf_AddDesc_caffe_2eproto();
+  friend void protobuf_AssignDesc_caffe_2eproto();
+  friend void protobuf_ShutdownFile_caffe_2eproto();
+
+  void InitAsDefaultInstance();
+  static VideoTemporalPoolingParameter* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class WindowDataParameter : public ::google::protobuf::Message {
  public:
   WindowDataParameter();
@@ -9342,6 +9434,7 @@ class V1LayerParameter : public ::google::protobuf::Message {
   static const LayerType MVN = V1LayerParameter_LayerType_MVN;
   static const LayerType POOLING = V1LayerParameter_LayerType_POOLING;
   static const LayerType POWER = V1LayerParameter_LayerType_POWER;
+  static const LayerType PAIRWISE_CLIP_HINGE_LOSS = V1LayerParameter_LayerType_PAIRWISE_CLIP_HINGE_LOSS;
   static const LayerType RELU = V1LayerParameter_LayerType_RELU;
   static const LayerType SIGMOID = V1LayerParameter_LayerType_SIGMOID;
   static const LayerType SIGMOID_CROSS_ENTROPY_LOSS = V1LayerParameter_LayerType_SIGMOID_CROSS_ENTROPY_LOSS;
@@ -9351,11 +9444,10 @@ class V1LayerParameter : public ::google::protobuf::Message {
   static const LayerType SPLIT = V1LayerParameter_LayerType_SPLIT;
   static const LayerType SLICE = V1LayerParameter_LayerType_SLICE;
   static const LayerType TANH = V1LayerParameter_LayerType_TANH;
-  static const LayerType WINDOW_DATA = V1LayerParameter_LayerType_WINDOW_DATA;
   static const LayerType THRESHOLD = V1LayerParameter_LayerType_THRESHOLD;
   static const LayerType TRIPLET_RANKING_HINGE_LOSS = V1LayerParameter_LayerType_TRIPLET_RANKING_HINGE_LOSS;
-  static const LayerType PAIRWISE_CLIP_HINGE_LOSS = V1LayerParameter_LayerType_PAIRWISE_CLIP_HINGE_LOSS;
   static const LayerType TRIPLET_CLIP_HINGE_LOSS = V1LayerParameter_LayerType_TRIPLET_CLIP_HINGE_LOSS;
+  static const LayerType WINDOW_DATA = V1LayerParameter_LayerType_WINDOW_DATA;
   static inline bool LayerType_IsValid(int value) {
     return V1LayerParameter_LayerType_IsValid(value);
   }
@@ -16092,45 +16184,45 @@ inline void LayerParameter::set_allocated_tile_param(::caffe::TileParameter* til
   // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.tile_param)
 }
 
-// optional .caffe.TripletRankingHingeLossParameter triplet_ranking_hinge_loss_param = 151;
-inline bool LayerParameter::has_triplet_ranking_hinge_loss_param() const {
+// optional .caffe.WindowDataParameter window_data_param = 129;
+inline bool LayerParameter::has_window_data_param() const {
   return (_has_bits_[1] & 0x02000000u) != 0;
 }
-inline void LayerParameter::set_has_triplet_ranking_hinge_loss_param() {
+inline void LayerParameter::set_has_window_data_param() {
   _has_bits_[1] |= 0x02000000u;
 }
-inline void LayerParameter::clear_has_triplet_ranking_hinge_loss_param() {
+inline void LayerParameter::clear_has_window_data_param() {
   _has_bits_[1] &= ~0x02000000u;
 }
-inline void LayerParameter::clear_triplet_ranking_hinge_loss_param() {
-  if (triplet_ranking_hinge_loss_param_ != NULL) triplet_ranking_hinge_loss_param_->::caffe::TripletRankingHingeLossParameter::Clear();
-  clear_has_triplet_ranking_hinge_loss_param();
+inline void LayerParameter::clear_window_data_param() {
+  if (window_data_param_ != NULL) window_data_param_->::caffe::WindowDataParameter::Clear();
+  clear_has_window_data_param();
 }
-inline const ::caffe::TripletRankingHingeLossParameter& LayerParameter::triplet_ranking_hinge_loss_param() const {
-  // @@protoc_insertion_point(field_get:caffe.LayerParameter.triplet_ranking_hinge_loss_param)
-  return triplet_ranking_hinge_loss_param_ != NULL ? *triplet_ranking_hinge_loss_param_ : *default_instance_->triplet_ranking_hinge_loss_param_;
+inline const ::caffe::WindowDataParameter& LayerParameter::window_data_param() const {
+  // @@protoc_insertion_point(field_get:caffe.LayerParameter.window_data_param)
+  return window_data_param_ != NULL ? *window_data_param_ : *default_instance_->window_data_param_;
 }
-inline ::caffe::TripletRankingHingeLossParameter* LayerParameter::mutable_triplet_ranking_hinge_loss_param() {
-  set_has_triplet_ranking_hinge_loss_param();
-  if (triplet_ranking_hinge_loss_param_ == NULL) triplet_ranking_hinge_loss_param_ = new ::caffe::TripletRankingHingeLossParameter;
-  // @@protoc_insertion_point(field_mutable:caffe.LayerParameter.triplet_ranking_hinge_loss_param)
-  return triplet_ranking_hinge_loss_param_;
+inline ::caffe::WindowDataParameter* LayerParameter::mutable_window_data_param() {
+  set_has_window_data_param();
+  if (window_data_param_ == NULL) window_data_param_ = new ::caffe::WindowDataParameter;
+  // @@protoc_insertion_point(field_mutable:caffe.LayerParameter.window_data_param)
+  return window_data_param_;
 }
-inline ::caffe::TripletRankingHingeLossParameter* LayerParameter::release_triplet_ranking_hinge_loss_param() {
-  clear_has_triplet_ranking_hinge_loss_param();
-  ::caffe::TripletRankingHingeLossParameter* temp = triplet_ranking_hinge_loss_param_;
-  triplet_ranking_hinge_loss_param_ = NULL;
+inline ::caffe::WindowDataParameter* LayerParameter::release_window_data_param() {
+  clear_has_window_data_param();
+  ::caffe::WindowDataParameter* temp = window_data_param_;
+  window_data_param_ = NULL;
   return temp;
 }
-inline void LayerParameter::set_allocated_triplet_ranking_hinge_loss_param(::caffe::TripletRankingHingeLossParameter* triplet_ranking_hinge_loss_param) {
-  delete triplet_ranking_hinge_loss_param_;
-  triplet_ranking_hinge_loss_param_ = triplet_ranking_hinge_loss_param;
-  if (triplet_ranking_hinge_loss_param) {
-    set_has_triplet_ranking_hinge_loss_param();
+inline void LayerParameter::set_allocated_window_data_param(::caffe::WindowDataParameter* window_data_param) {
+  delete window_data_param_;
+  window_data_param_ = window_data_param;
+  if (window_data_param) {
+    set_has_window_data_param();
   } else {
-    clear_has_triplet_ranking_hinge_loss_param();
+    clear_has_window_data_param();
   }
-  // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.triplet_ranking_hinge_loss_param)
+  // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.window_data_param)
 }
 
 // optional .caffe.PairWiseClipHingeLossParameter pairwise_clip_hinge_loss_param = 152;
@@ -16174,15 +16266,56 @@ inline void LayerParameter::set_allocated_pairwise_clip_hinge_loss_param(::caffe
   // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.pairwise_clip_hinge_loss_param)
 }
 
-// optional .caffe.TripletClipHingeLossParameter triplet_clip_hinge_loss_param = 153;
-inline bool LayerParameter::has_triplet_clip_hinge_loss_param() const {
+// optional .caffe.TripletRankingHingeLossParameter triplet_ranking_hinge_loss_param = 151;
+inline bool LayerParameter::has_triplet_ranking_hinge_loss_param() const {
   return (_has_bits_[1] & 0x08000000u) != 0;
 }
-inline void LayerParameter::set_has_triplet_clip_hinge_loss_param() {
+inline void LayerParameter::set_has_triplet_ranking_hinge_loss_param() {
   _has_bits_[1] |= 0x08000000u;
 }
-inline void LayerParameter::clear_has_triplet_clip_hinge_loss_param() {
+inline void LayerParameter::clear_has_triplet_ranking_hinge_loss_param() {
   _has_bits_[1] &= ~0x08000000u;
+}
+inline void LayerParameter::clear_triplet_ranking_hinge_loss_param() {
+  if (triplet_ranking_hinge_loss_param_ != NULL) triplet_ranking_hinge_loss_param_->::caffe::TripletRankingHingeLossParameter::Clear();
+  clear_has_triplet_ranking_hinge_loss_param();
+}
+inline const ::caffe::TripletRankingHingeLossParameter& LayerParameter::triplet_ranking_hinge_loss_param() const {
+  // @@protoc_insertion_point(field_get:caffe.LayerParameter.triplet_ranking_hinge_loss_param)
+  return triplet_ranking_hinge_loss_param_ != NULL ? *triplet_ranking_hinge_loss_param_ : *default_instance_->triplet_ranking_hinge_loss_param_;
+}
+inline ::caffe::TripletRankingHingeLossParameter* LayerParameter::mutable_triplet_ranking_hinge_loss_param() {
+  set_has_triplet_ranking_hinge_loss_param();
+  if (triplet_ranking_hinge_loss_param_ == NULL) triplet_ranking_hinge_loss_param_ = new ::caffe::TripletRankingHingeLossParameter;
+  // @@protoc_insertion_point(field_mutable:caffe.LayerParameter.triplet_ranking_hinge_loss_param)
+  return triplet_ranking_hinge_loss_param_;
+}
+inline ::caffe::TripletRankingHingeLossParameter* LayerParameter::release_triplet_ranking_hinge_loss_param() {
+  clear_has_triplet_ranking_hinge_loss_param();
+  ::caffe::TripletRankingHingeLossParameter* temp = triplet_ranking_hinge_loss_param_;
+  triplet_ranking_hinge_loss_param_ = NULL;
+  return temp;
+}
+inline void LayerParameter::set_allocated_triplet_ranking_hinge_loss_param(::caffe::TripletRankingHingeLossParameter* triplet_ranking_hinge_loss_param) {
+  delete triplet_ranking_hinge_loss_param_;
+  triplet_ranking_hinge_loss_param_ = triplet_ranking_hinge_loss_param;
+  if (triplet_ranking_hinge_loss_param) {
+    set_has_triplet_ranking_hinge_loss_param();
+  } else {
+    clear_has_triplet_ranking_hinge_loss_param();
+  }
+  // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.triplet_ranking_hinge_loss_param)
+}
+
+// optional .caffe.TripletClipHingeLossParameter triplet_clip_hinge_loss_param = 153;
+inline bool LayerParameter::has_triplet_clip_hinge_loss_param() const {
+  return (_has_bits_[1] & 0x10000000u) != 0;
+}
+inline void LayerParameter::set_has_triplet_clip_hinge_loss_param() {
+  _has_bits_[1] |= 0x10000000u;
+}
+inline void LayerParameter::clear_has_triplet_clip_hinge_loss_param() {
+  _has_bits_[1] &= ~0x10000000u;
 }
 inline void LayerParameter::clear_triplet_clip_hinge_loss_param() {
   if (triplet_clip_hinge_loss_param_ != NULL) triplet_clip_hinge_loss_param_->::caffe::TripletClipHingeLossParameter::Clear();
@@ -16215,45 +16348,45 @@ inline void LayerParameter::set_allocated_triplet_clip_hinge_loss_param(::caffe:
   // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.triplet_clip_hinge_loss_param)
 }
 
-// optional .caffe.WindowDataParameter window_data_param = 129;
-inline bool LayerParameter::has_window_data_param() const {
-  return (_has_bits_[1] & 0x10000000u) != 0;
+// optional .caffe.VideoTemporalPoolingParameter video_temporal_pooling_param = 154;
+inline bool LayerParameter::has_video_temporal_pooling_param() const {
+  return (_has_bits_[1] & 0x20000000u) != 0;
 }
-inline void LayerParameter::set_has_window_data_param() {
-  _has_bits_[1] |= 0x10000000u;
+inline void LayerParameter::set_has_video_temporal_pooling_param() {
+  _has_bits_[1] |= 0x20000000u;
 }
-inline void LayerParameter::clear_has_window_data_param() {
-  _has_bits_[1] &= ~0x10000000u;
+inline void LayerParameter::clear_has_video_temporal_pooling_param() {
+  _has_bits_[1] &= ~0x20000000u;
 }
-inline void LayerParameter::clear_window_data_param() {
-  if (window_data_param_ != NULL) window_data_param_->::caffe::WindowDataParameter::Clear();
-  clear_has_window_data_param();
+inline void LayerParameter::clear_video_temporal_pooling_param() {
+  if (video_temporal_pooling_param_ != NULL) video_temporal_pooling_param_->::caffe::VideoTemporalPoolingParameter::Clear();
+  clear_has_video_temporal_pooling_param();
 }
-inline const ::caffe::WindowDataParameter& LayerParameter::window_data_param() const {
-  // @@protoc_insertion_point(field_get:caffe.LayerParameter.window_data_param)
-  return window_data_param_ != NULL ? *window_data_param_ : *default_instance_->window_data_param_;
+inline const ::caffe::VideoTemporalPoolingParameter& LayerParameter::video_temporal_pooling_param() const {
+  // @@protoc_insertion_point(field_get:caffe.LayerParameter.video_temporal_pooling_param)
+  return video_temporal_pooling_param_ != NULL ? *video_temporal_pooling_param_ : *default_instance_->video_temporal_pooling_param_;
 }
-inline ::caffe::WindowDataParameter* LayerParameter::mutable_window_data_param() {
-  set_has_window_data_param();
-  if (window_data_param_ == NULL) window_data_param_ = new ::caffe::WindowDataParameter;
-  // @@protoc_insertion_point(field_mutable:caffe.LayerParameter.window_data_param)
-  return window_data_param_;
+inline ::caffe::VideoTemporalPoolingParameter* LayerParameter::mutable_video_temporal_pooling_param() {
+  set_has_video_temporal_pooling_param();
+  if (video_temporal_pooling_param_ == NULL) video_temporal_pooling_param_ = new ::caffe::VideoTemporalPoolingParameter;
+  // @@protoc_insertion_point(field_mutable:caffe.LayerParameter.video_temporal_pooling_param)
+  return video_temporal_pooling_param_;
 }
-inline ::caffe::WindowDataParameter* LayerParameter::release_window_data_param() {
-  clear_has_window_data_param();
-  ::caffe::WindowDataParameter* temp = window_data_param_;
-  window_data_param_ = NULL;
+inline ::caffe::VideoTemporalPoolingParameter* LayerParameter::release_video_temporal_pooling_param() {
+  clear_has_video_temporal_pooling_param();
+  ::caffe::VideoTemporalPoolingParameter* temp = video_temporal_pooling_param_;
+  video_temporal_pooling_param_ = NULL;
   return temp;
 }
-inline void LayerParameter::set_allocated_window_data_param(::caffe::WindowDataParameter* window_data_param) {
-  delete window_data_param_;
-  window_data_param_ = window_data_param;
-  if (window_data_param) {
-    set_has_window_data_param();
+inline void LayerParameter::set_allocated_video_temporal_pooling_param(::caffe::VideoTemporalPoolingParameter* video_temporal_pooling_param) {
+  delete video_temporal_pooling_param_;
+  video_temporal_pooling_param_ = video_temporal_pooling_param;
+  if (video_temporal_pooling_param) {
+    set_has_video_temporal_pooling_param();
   } else {
-    clear_has_window_data_param();
+    clear_has_video_temporal_pooling_param();
   }
-  // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.window_data_param)
+  // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.video_temporal_pooling_param)
 }
 
 // -------------------------------------------------------------------
@@ -21615,6 +21748,34 @@ inline void ThresholdParameter::set_threshold(float value) {
   set_has_threshold();
   threshold_ = value;
   // @@protoc_insertion_point(field_set:caffe.ThresholdParameter.threshold)
+}
+
+// -------------------------------------------------------------------
+
+// VideoTemporalPoolingParameter
+
+// optional uint32 frame_num = 1;
+inline bool VideoTemporalPoolingParameter::has_frame_num() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void VideoTemporalPoolingParameter::set_has_frame_num() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void VideoTemporalPoolingParameter::clear_has_frame_num() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void VideoTemporalPoolingParameter::clear_frame_num() {
+  frame_num_ = 0u;
+  clear_has_frame_num();
+}
+inline ::google::protobuf::uint32 VideoTemporalPoolingParameter::frame_num() const {
+  // @@protoc_insertion_point(field_get:caffe.VideoTemporalPoolingParameter.frame_num)
+  return frame_num_;
+}
+inline void VideoTemporalPoolingParameter::set_frame_num(::google::protobuf::uint32 value) {
+  set_has_frame_num();
+  frame_num_ = value;
+  // @@protoc_insertion_point(field_set:caffe.VideoTemporalPoolingParameter.frame_num)
 }
 
 // -------------------------------------------------------------------

@@ -77,7 +77,7 @@ namespace caffe{
 			Dtype diff = caffe_cpu_asum(dim, sub_or_di);
 			Dtype loss(0.0);
 			if (bottom[2]->cpu_data()[n*frame_num] == 0)
-				loss = std::max(margin - diff, Dtype(0));
+				loss = std::max(margin - diff, Dtype(FLT_MIN));
 			else
 				loss = diff;
 			diff_.mutable_cpu_data()[n] = loss; // save the loss[i]
@@ -199,14 +199,14 @@ namespace caffe{
 							caffe_scal(dim, Dtype(2) / Dtype(num),
 								gradient_pairwise.mutable_cpu_data());
 						}
-						else if (dist_sq_.cpu_data()[j / frame_num] > Dtype(0.0)){
+						else if (dist_sq_.cpu_data()[j / frame_num] > Dtype(FLT_MIN)){
 							caffe_sub(dim, diffrcode, orignalcode,
 								gradient_pairwise.mutable_cpu_data());// the distance of F and F-
 							caffe_scal(dim, Dtype(2) / Dtype(num),
 								gradient_pairwise.mutable_cpu_data());
 						}
 						else
-							caffe_set(dim, Dtype(0.0),
+							caffe_set(dim, Dtype(FLT_MIN),
 							gradient_pairwise.mutable_cpu_data());
 						compute_gradient_structure(i, j);
 						caffe_scal(dim, lamda, gradient_pairwise.mutable_cpu_data());
@@ -221,14 +221,14 @@ namespace caffe{
 							caffe_scal(dim, Dtype(2) / Dtype(num),
 								gradient_pairwise.mutable_cpu_data());
 						}
-						else if (dist_sq_.cpu_data()[j / frame_num] > Dtype(0.0)){
+						else if (dist_sq_.cpu_data()[j / frame_num] > Dtype(FLT_MIN)){
 							caffe_sub(dim, orignalcode, diffrcode,
 								gradient_pairwise.mutable_cpu_data());
 							caffe_scal(dim, Dtype(2) / Dtype(num),
 								gradient_pairwise.mutable_cpu_data());
 						}
 						else
-							caffe_set(dim, Dtype(0.0),
+							caffe_set(dim, Dtype(FLT_MIN),
 							gradient_pairwise.mutable_cpu_data());
 						compute_gradient_structure(i, j);
 						caffe_scal(dim, lamda, gradient_pairwise.mutable_cpu_data());

@@ -1,13 +1,14 @@
 // This program converts a set of feature to a lmdb/leveldb by storing them
 // as Datum proto buffers.
 // Usage:
-//    convert_triplet_feature_data.exe [FLAGS] FEATURE_LIST TRIPLET_LIST OUTPUT_DB
+//    convert_triplet_feature_data.exe [FLAGS] FEATURE_LIST_BIN TRIPLET_LIST OUTPUT_DB
 //      DIM FEATURE_NUM TRIPLET_NUM
 //
 //   ....
 
 
 // added by Fuchen Long in 7.31.2016
+// this is only for reading bin file feature list 
 
 #include <fstream>  // NOLINT(readability/streams)
 #include <string>
@@ -81,15 +82,15 @@ void convert_dataset(const char* feature_list_filename, const char*maping_list_f
 	}
 
 	// just for the testing
-	std::cout << "The feature check " << 
+	std::cout << "The feature check " <<
 		TotalFeature[55][14] << " " << TotalFeature[90][13] << " \n";
-	std::cout << "The maping check " << 
+	std::cout << "The maping check " <<
 		TripletMaping[15][1] << " " << TripletMaping[123][2] << " \n";
 	feature_list_in1.close();
 	maping_list_in2.close();
 
 
-	
+
 	scoped_ptr<db::DB> db(db::GetDB(FLAGS_backend));
 	db->Open(db_filename, db::NEW);
 	scoped_ptr<db::Transaction> txn(db->NewTransaction());
@@ -128,12 +129,12 @@ void convert_dataset(const char* feature_list_filename, const char*maping_list_f
 		datum.set_label(1);
 		// sequential
 		int length = _snprintf(key, kMaxKeyLength, "%08d", triplet);
-		
+
 		// Put in db
 		datum.SerializeToString(&value);
-		txn->Put(std::string(key,length), value);
+		txn->Put(std::string(key, length), value);
 		if (++count % 1000 == 0){
-		    // Commit db
+			// Commit db
 			txn->Commit();
 			txn.reset(db->NewTransaction());
 			LOG(ERROR) << "triplet:" << count << "\n";
