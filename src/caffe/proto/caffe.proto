@@ -1296,6 +1296,7 @@ message V1LayerParameter {
 	THRESHOLD = 31;
 	TRIPLET_RANKING_HINGE_LOSS=40;
 	TRIPLET_CLIP_HINGE_LOSS=42;
+	VIDEO_TEMPORAL_POOLING=43;
     WINDOW_DATA = 24;
   }
   optional LayerType type = 5;
@@ -1342,6 +1343,7 @@ message V1LayerParameter {
   optional TripletRankingHingeLossParameter triplet_ranking_hinge_loss_param = 43;
   optional PairWiseClipHingeLossParameter pairwise_clip_hinge_loss_param = 44;
   optional TripletClipHingeLossParameter triplet_clip_hinge_loss_param = 45;
+  optional VideoTemporalPoolingParameter video_temporal_pooling_param=46;
   optional V0LayerParameter layer = 1;
 }
 

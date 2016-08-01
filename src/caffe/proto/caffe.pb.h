@@ -562,11 +562,12 @@ enum V1LayerParameter_LayerType {
   V1LayerParameter_LayerType_THRESHOLD = 31,
   V1LayerParameter_LayerType_TRIPLET_RANKING_HINGE_LOSS = 40,
   V1LayerParameter_LayerType_TRIPLET_CLIP_HINGE_LOSS = 42,
+  V1LayerParameter_LayerType_VIDEO_TEMPORAL_POOLING = 43,
   V1LayerParameter_LayerType_WINDOW_DATA = 24
 };
 bool V1LayerParameter_LayerType_IsValid(int value);
 const V1LayerParameter_LayerType V1LayerParameter_LayerType_LayerType_MIN = V1LayerParameter_LayerType_NONE;
-const V1LayerParameter_LayerType V1LayerParameter_LayerType_LayerType_MAX = V1LayerParameter_LayerType_TRIPLET_CLIP_HINGE_LOSS;
+const V1LayerParameter_LayerType V1LayerParameter_LayerType_LayerType_MAX = V1LayerParameter_LayerType_VIDEO_TEMPORAL_POOLING;
 const int V1LayerParameter_LayerType_LayerType_ARRAYSIZE = V1LayerParameter_LayerType_LayerType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* V1LayerParameter_LayerType_descriptor();
@@ -9447,6 +9448,7 @@ class V1LayerParameter : public ::google::protobuf::Message {
   static const LayerType THRESHOLD = V1LayerParameter_LayerType_THRESHOLD;
   static const LayerType TRIPLET_RANKING_HINGE_LOSS = V1LayerParameter_LayerType_TRIPLET_RANKING_HINGE_LOSS;
   static const LayerType TRIPLET_CLIP_HINGE_LOSS = V1LayerParameter_LayerType_TRIPLET_CLIP_HINGE_LOSS;
+  static const LayerType VIDEO_TEMPORAL_POOLING = V1LayerParameter_LayerType_VIDEO_TEMPORAL_POOLING;
   static const LayerType WINDOW_DATA = V1LayerParameter_LayerType_WINDOW_DATA;
   static inline bool LayerType_IsValid(int value) {
     return V1LayerParameter_LayerType_IsValid(value);
@@ -9941,6 +9943,15 @@ class V1LayerParameter : public ::google::protobuf::Message {
   inline ::caffe::TripletClipHingeLossParameter* release_triplet_clip_hinge_loss_param();
   inline void set_allocated_triplet_clip_hinge_loss_param(::caffe::TripletClipHingeLossParameter* triplet_clip_hinge_loss_param);
 
+  // optional .caffe.VideoTemporalPoolingParameter video_temporal_pooling_param = 46;
+  inline bool has_video_temporal_pooling_param() const;
+  inline void clear_video_temporal_pooling_param();
+  static const int kVideoTemporalPoolingParamFieldNumber = 46;
+  inline const ::caffe::VideoTemporalPoolingParameter& video_temporal_pooling_param() const;
+  inline ::caffe::VideoTemporalPoolingParameter* mutable_video_temporal_pooling_param();
+  inline ::caffe::VideoTemporalPoolingParameter* release_video_temporal_pooling_param();
+  inline void set_allocated_video_temporal_pooling_param(::caffe::VideoTemporalPoolingParameter* video_temporal_pooling_param);
+
   // optional .caffe.V0LayerParameter layer = 1;
   inline bool has_layer() const;
   inline void clear_layer();
@@ -10022,6 +10033,8 @@ class V1LayerParameter : public ::google::protobuf::Message {
   inline void clear_has_pairwise_clip_hinge_loss_param();
   inline void set_has_triplet_clip_hinge_loss_param();
   inline void clear_has_triplet_clip_hinge_loss_param();
+  inline void set_has_video_temporal_pooling_param();
+  inline void clear_has_video_temporal_pooling_param();
   inline void set_has_layer();
   inline void clear_has_layer();
 
@@ -10072,6 +10085,7 @@ class V1LayerParameter : public ::google::protobuf::Message {
   ::caffe::TripletRankingHingeLossParameter* triplet_ranking_hinge_loss_param_;
   ::caffe::PairWiseClipHingeLossParameter* pairwise_clip_hinge_loss_param_;
   ::caffe::TripletClipHingeLossParameter* triplet_clip_hinge_loss_param_;
+  ::caffe::VideoTemporalPoolingParameter* video_temporal_pooling_param_;
   ::caffe::V0LayerParameter* layer_;
   int type_;
   mutable int _cached_size_;
@@ -24212,15 +24226,56 @@ inline void V1LayerParameter::set_allocated_triplet_clip_hinge_loss_param(::caff
   // @@protoc_insertion_point(field_set_allocated:caffe.V1LayerParameter.triplet_clip_hinge_loss_param)
 }
 
-// optional .caffe.V0LayerParameter layer = 1;
-inline bool V1LayerParameter::has_layer() const {
+// optional .caffe.VideoTemporalPoolingParameter video_temporal_pooling_param = 46;
+inline bool V1LayerParameter::has_video_temporal_pooling_param() const {
   return (_has_bits_[1] & 0x00002000u) != 0;
 }
-inline void V1LayerParameter::set_has_layer() {
+inline void V1LayerParameter::set_has_video_temporal_pooling_param() {
   _has_bits_[1] |= 0x00002000u;
 }
-inline void V1LayerParameter::clear_has_layer() {
+inline void V1LayerParameter::clear_has_video_temporal_pooling_param() {
   _has_bits_[1] &= ~0x00002000u;
+}
+inline void V1LayerParameter::clear_video_temporal_pooling_param() {
+  if (video_temporal_pooling_param_ != NULL) video_temporal_pooling_param_->::caffe::VideoTemporalPoolingParameter::Clear();
+  clear_has_video_temporal_pooling_param();
+}
+inline const ::caffe::VideoTemporalPoolingParameter& V1LayerParameter::video_temporal_pooling_param() const {
+  // @@protoc_insertion_point(field_get:caffe.V1LayerParameter.video_temporal_pooling_param)
+  return video_temporal_pooling_param_ != NULL ? *video_temporal_pooling_param_ : *default_instance_->video_temporal_pooling_param_;
+}
+inline ::caffe::VideoTemporalPoolingParameter* V1LayerParameter::mutable_video_temporal_pooling_param() {
+  set_has_video_temporal_pooling_param();
+  if (video_temporal_pooling_param_ == NULL) video_temporal_pooling_param_ = new ::caffe::VideoTemporalPoolingParameter;
+  // @@protoc_insertion_point(field_mutable:caffe.V1LayerParameter.video_temporal_pooling_param)
+  return video_temporal_pooling_param_;
+}
+inline ::caffe::VideoTemporalPoolingParameter* V1LayerParameter::release_video_temporal_pooling_param() {
+  clear_has_video_temporal_pooling_param();
+  ::caffe::VideoTemporalPoolingParameter* temp = video_temporal_pooling_param_;
+  video_temporal_pooling_param_ = NULL;
+  return temp;
+}
+inline void V1LayerParameter::set_allocated_video_temporal_pooling_param(::caffe::VideoTemporalPoolingParameter* video_temporal_pooling_param) {
+  delete video_temporal_pooling_param_;
+  video_temporal_pooling_param_ = video_temporal_pooling_param;
+  if (video_temporal_pooling_param) {
+    set_has_video_temporal_pooling_param();
+  } else {
+    clear_has_video_temporal_pooling_param();
+  }
+  // @@protoc_insertion_point(field_set_allocated:caffe.V1LayerParameter.video_temporal_pooling_param)
+}
+
+// optional .caffe.V0LayerParameter layer = 1;
+inline bool V1LayerParameter::has_layer() const {
+  return (_has_bits_[1] & 0x00004000u) != 0;
+}
+inline void V1LayerParameter::set_has_layer() {
+  _has_bits_[1] |= 0x00004000u;
+}
+inline void V1LayerParameter::clear_has_layer() {
+  _has_bits_[1] &= ~0x00004000u;
 }
 inline void V1LayerParameter::clear_layer() {
   if (layer_ != NULL) layer_->::caffe::V0LayerParameter::Clear();

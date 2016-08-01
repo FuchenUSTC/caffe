@@ -31,8 +31,8 @@ public:
 protected:
 	virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
 		const vector<Blob<Dtype>*>& top);
-	virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-		const vector<Blob<Dtype>*>& top);
+	virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+		const vector<bool>& propagate_dowm, const vector<Blob<Dtype>*>& bottom);
 
 	int frame_num_;
 };
