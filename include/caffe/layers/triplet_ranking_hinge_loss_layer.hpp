@@ -37,7 +37,8 @@ protected:
 		const vector<Blob<Dtype>*>& top);
 	virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
 		const vector<bool>& propagate_dowm, const vector<Blob<Dtype>*>& bottom);
-	int dim;
+	int dim_;
+	int batch_;
 	Dtype margin;
 	Blob<Dtype> diff_;
 	Blob<Dtype> dist_sq_;

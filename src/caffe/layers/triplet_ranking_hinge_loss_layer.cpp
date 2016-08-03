@@ -11,13 +11,14 @@ template <typename Dtype>
 void TripletRankingHingeLossLayer<Dtype>::LayerSetUp(
 	const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top) {
 	LossLayer<Dtype>::LayerSetUp(bottom, top);
-	dim = this->layer_param_.triplet_ranking_hinge_loss_param().dim();
+	dim_ = this->layer_param_.triplet_ranking_hinge_loss_param().dim();
 	margin = this->layer_param_.triplet_ranking_hinge_loss_param().margin();
+	batch_ = bottom[0]->num();
 	CHECK_EQ(bottom[0]->channels(), bottom[1]->channels());
 	CHECK_EQ(bottom[1]->channels(), bottom[2]->channels());
-	CHECK_EQ(bottom[0]->channels(), dim); //check the dimension
-	CHECK_EQ(bottom[1]->channels(), dim);
-	CHECK_EQ(bottom[2]->channels(), dim);
+	CHECK_EQ(bottom[0]->channels(), dim_); //check the dim_ension
+	CHECK_EQ(bottom[1]->channels(), dim_);
+	CHECK_EQ(bottom[2]->channels(), dim_);
 	diff_.Reshape(bottom[0]->num(), 1, 1, 1);
 	dist_sq_.Reshape(bottom[0]->num(), 1, 1, 1);
 	diff_sub_or_si.Reshape(bottom[0]->num(), bottom[0]->channels(), 1, 1); // F-F+
@@ -31,35 +32,31 @@ void TripletRankingHingeLossLayer<Dtype>::LayerSetUp(
 
 template <typename Dtype>
 void TripletRankingHingeLossLayer<Dtype>::Forward_cpu(
-	const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top
-	){
-
-	const int batchsize = bottom[0]->num();
-	int Dimv = batchsize*dim;
+	const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top){
+	int dim_v = batch_*dim_;
 	const Dtype* sub_or_si;
 	const Dtype* sub_or_di;
 	Dtype b = 2;
 	Dtype Tripletlosstotal(0.0);
 
 	//The triplet ranking loss
-	caffe_sub(Dimv, bottom[0]->cpu_data(), bottom[1]->cpu_data(), diff_sub_or_si.mutable_cpu_data()); // F-F+
-	caffe_sub(Dimv, bottom[0]->cpu_data(), bottom[2]->cpu_data(), diff_sub_or_di.mutable_cpu_data()); // F-F-
-	caffe_powx(Dimv, diff_sub_or_si.cpu_data(), Dtype(2.0), diff_pow_or_si.mutable_cpu_data());		  //Pow
-	caffe_powx(Dimv, diff_sub_or_di.cpu_data(), Dtype(2.0), diff_pow_or_di.mutable_cpu_data());       //Pow
-	for (int n = 0; n < batchsize; n++)
-	{
+	caffe_sub(dim_v, bottom[0]->cpu_data(), bottom[1]->cpu_data(), diff_sub_or_si.mutable_cpu_data()); // F-F+
+	caffe_sub(dim_v, bottom[0]->cpu_data(), bottom[2]->cpu_data(), diff_sub_or_di.mutable_cpu_data()); // F-F-
+	caffe_powx(dim_v, diff_sub_or_si.cpu_data(), Dtype(2.0), diff_pow_or_si.mutable_cpu_data());		  //Pow
+	caffe_powx(dim_v, diff_sub_or_di.cpu_data(), Dtype(2.0), diff_pow_or_di.mutable_cpu_data());       //Pow
+
+	for (int n = 0; n < batch_; n++){
 		sub_or_si = diff_pow_or_si.cpu_data() + diff_pow_or_si.offset(n);
 		sub_or_di = diff_pow_or_di.cpu_data() + diff_pow_or_di.offset(n);
 		Dtype result1 = 0;
 		Dtype result2 = 0;
-		result1 = caffe_cpu_asum(dim, sub_or_si);
-		result2 = caffe_cpu_asum(dim, sub_or_di);
+		result1 = caffe_cpu_asum(dim_, sub_or_si);
+		result2 = caffe_cpu_asum(dim_, sub_or_di);
 		Dtype loss(0.0);
 		loss = std::max(margin + result1 - result2, Dtype(0));// compute the loss
 		diff_.mutable_cpu_data()[n] = loss; // save the loss[i]
 	}
-	for (int k = 0; k < batchsize; k++)
-	{
+	for (int k = 0; k < batch_; k++){
 
 		dist_sq_.mutable_cpu_data()[k] = diff_.cpu_data()[k];// save the loss[i] for BP
 		Tripletlosstotal += dist_sq_.cpu_data()[k];
@@ -76,54 +73,46 @@ void TripletRankingHingeLossLayer<Dtype>::Backward_cpu(
 	const Dtype* similarcode;
 	const Dtype* diffrcode;
 	if (propagate_down[0]) {
-		for (int i = 0; i < 3; ++i) {// for each stream need to get a loss
-
-			int num = bottom[i]->num(); // get the layers' batchsize
-			int channels = bottom[i]->channels();// get the layers' channels, channels==codelength
-			for (int j = 0; j < num; ++j) // for each batch
-			{
-				Dtype* bout = bottom[i]->mutable_cpu_diff();// get the 3 bottoms' address, the i th bottom's address
-				orignalcode = bottom[0]->cpu_data() + bottom[0]->offset(j);// get  the original image hash approximate code
-				similarcode = bottom[1]->cpu_data() + bottom[1]->offset(j);// get the similar image hash approximate code
-				diffrcode = bottom[2]->cpu_data() + bottom[2]->offset(j);//get the different image hash approximate code
-				if (i == 0)// for the original bottom layer
-				{
-					if (dist_sq_.cpu_data()[j]>Dtype(0.0))//if the j th batch's loss > 0
-					{
-						caffe_sub(dim, diffrcode, similarcode, gradient.mutable_cpu_data());// the distance of F- and F+
-						caffe_scal(dim, Dtype(2) / Dtype(num), gradient.mutable_cpu_data());// scale the 2/num
+		for (int i = 0; i < 3; ++i) {
+			for (int j = 0; j < batch_; ++j){
+				Dtype* bout = bottom[i]->mutable_cpu_diff();
+				orignalcode = bottom[0]->cpu_data() + bottom[0]->offset(j);
+				similarcode = bottom[1]->cpu_data() + bottom[1]->offset(j);
+				diffrcode = bottom[2]->cpu_data() + bottom[2]->offset(j);
+				if (i == 0){
+					if (dist_sq_.cpu_data()[j]>Dtype(0.0)){
+						caffe_sub(dim_, diffrcode, similarcode,
+							gradient.mutable_cpu_data());// the distance of F- and F+
+						caffe_scal(dim_, Dtype(2) / Dtype(batch_),
+							gradient.mutable_cpu_data());
 					}
 					else
-						caffe_sub(dim, diffrcode, diffrcode, gradient.mutable_cpu_data());// if the j th batch's loss <=0 ,return 0 vector
-
+						caffe_set(dim_, Dtype(0.0), gradient.mutable_cpu_data());
 				}
-				if (i == 1)// for the similar bottom layer
-				{
-					if (dist_sq_.cpu_data()[j] > Dtype(0.0))// if the j th batch's loss > 0
-					{
-						caffe_sub(dim, similarcode, orignalcode, gradient.mutable_cpu_data());// the distance of F+ and F
-						caffe_scal(dim, Dtype(2) / Dtype(num), gradient.mutable_cpu_data());//scale the 2/num
-
+				if (i == 1){
+					if (dist_sq_.cpu_data()[j] > Dtype(0.0)){
+						caffe_sub(dim_, similarcode, orignalcode, 
+							gradient.mutable_cpu_data());// the distance of F+ and F
+						caffe_scal(dim_, Dtype(2) / Dtype(batch_),
+							gradient.mutable_cpu_data());
 					}
 					else
-						caffe_sub(dim, diffrcode, diffrcode, gradient.mutable_cpu_data());// if the j th batch's loss <=0, return 0 vector
+						caffe_set(dim_, Dtype(0.0), gradient.mutable_cpu_data());
 				}
-				if (i == 2)// for the different bottom layer
-				{
-					if (dist_sq_.cpu_data()[j] > Dtype(0.0))// if the j th batch's loss > 0
-					{
-						caffe_sub(dim, orignalcode, diffrcode, gradient.mutable_cpu_data()); // the distance of F and F-
-						caffe_scal(dim, Dtype(2) / Dtype(num), gradient.mutable_cpu_data());//scale the 2/num
-
+				if (i == 2){
+					if (dist_sq_.cpu_data()[j] > Dtype(0.0)){
+						caffe_sub(dim_, orignalcode, diffrcode,
+							gradient.mutable_cpu_data()); // the distance of F and F-
+						caffe_scal(dim_, Dtype(2) / Dtype(batch_),
+							gradient.mutable_cpu_data());
 					}
 					else
-						caffe_sub(dim, diffrcode, diffrcode, gradient.mutable_cpu_data());// if the j th batch's loss =0 ,return 0 vector
+						caffe_set(dim_, Dtype(0.0), gradient.mutable_cpu_data());
 				}
-				caffe_scal(dim, Dtype(2.0), gradient.mutable_cpu_data());
-				caffe_copy(channels, gradient.cpu_data(), bout + (j*channels));//return the BP vector to the j th batch's bottom
+				caffe_scal(dim_, Dtype(2.0), gradient.mutable_cpu_data());
+				caffe_copy(dim_, gradient.cpu_data(), bout + (j*dim_));
 			}
 		}
-
 	}
 }
 

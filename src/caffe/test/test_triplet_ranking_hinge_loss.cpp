@@ -56,7 +56,7 @@ namespace caffe{
 			//set some hyper parameter
 			TripletRankingHingeLossParameter * triplet_ranking_hinge_loss_param = layer_param.mutable_triplet_ranking_hinge_loss_param();
 			triplet_ranking_hinge_loss_param->set_dim(40);
-			triplet_ranking_hinge_loss_param->set_margin(1);
+			triplet_ranking_hinge_loss_param->set_margin(3);
 			TripletRankingHingeLossLayer<Dtype> layer_weight_1(layer_param);
 			layer_weight_1.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
 			const Dtype loss_weight_1 =
@@ -99,7 +99,7 @@ namespace caffe{
 		layer_param.add_loss_weight(kLossWeight);
 		TripletRankingHingeLossParameter * triplet_ranking_hinge_loss_param = layer_param.mutable_triplet_ranking_hinge_loss_param();
 		triplet_ranking_hinge_loss_param->set_dim(40);
-		triplet_ranking_hinge_loss_param->set_margin(1);
+		triplet_ranking_hinge_loss_param->set_margin(3);
 		TripletRankingHingeLossLayer<Dtype> layer(layer_param);
 		layer.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
 		GradientChecker<Dtype> checker(1e-2, 1e-2, 1701);
