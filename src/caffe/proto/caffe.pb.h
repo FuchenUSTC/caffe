@@ -89,6 +89,8 @@ class SliceParameter;
 class TripletRankingHingeLossParameter;
 class PairWiseClipHingeLossParameter;
 class TripletClipHingeLossParameter;
+class BalanceConstraintLossParameter;
+class OrthogonalConstraintLossParameter;
 class SoftmaxParameter;
 class TanHParameter;
 class TileParameter;
@@ -563,11 +565,13 @@ enum V1LayerParameter_LayerType {
   V1LayerParameter_LayerType_TRIPLET_RANKING_HINGE_LOSS = 40,
   V1LayerParameter_LayerType_TRIPLET_CLIP_HINGE_LOSS = 42,
   V1LayerParameter_LayerType_VIDEO_TEMPORAL_POOLING = 43,
+  V1LayerParameter_LayerType_BALANCE_CONSTRAINT_LOSS = 44,
+  V1LayerParameter_LayerType_ORTHOGONAL_CONSTRAINT_LOSS = 45,
   V1LayerParameter_LayerType_WINDOW_DATA = 24
 };
 bool V1LayerParameter_LayerType_IsValid(int value);
 const V1LayerParameter_LayerType V1LayerParameter_LayerType_LayerType_MIN = V1LayerParameter_LayerType_NONE;
-const V1LayerParameter_LayerType V1LayerParameter_LayerType_LayerType_MAX = V1LayerParameter_LayerType_VIDEO_TEMPORAL_POOLING;
+const V1LayerParameter_LayerType V1LayerParameter_LayerType_LayerType_MAX = V1LayerParameter_LayerType_ORTHOGONAL_CONSTRAINT_LOSS;
 const int V1LayerParameter_LayerType_LayerType_ARRAYSIZE = V1LayerParameter_LayerType_LayerType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* V1LayerParameter_LayerType_descriptor();
@@ -3237,6 +3241,24 @@ class LayerParameter : public ::google::protobuf::Message {
   inline ::caffe::VideoTemporalPoolingParameter* release_video_temporal_pooling_param();
   inline void set_allocated_video_temporal_pooling_param(::caffe::VideoTemporalPoolingParameter* video_temporal_pooling_param);
 
+  // optional .caffe.BalanceConstraintLossParameter balance_constraint_loss_param = 155;
+  inline bool has_balance_constraint_loss_param() const;
+  inline void clear_balance_constraint_loss_param();
+  static const int kBalanceConstraintLossParamFieldNumber = 155;
+  inline const ::caffe::BalanceConstraintLossParameter& balance_constraint_loss_param() const;
+  inline ::caffe::BalanceConstraintLossParameter* mutable_balance_constraint_loss_param();
+  inline ::caffe::BalanceConstraintLossParameter* release_balance_constraint_loss_param();
+  inline void set_allocated_balance_constraint_loss_param(::caffe::BalanceConstraintLossParameter* balance_constraint_loss_param);
+
+  // optional .caffe.OrthogonalConstraintLossParameter orthogonal_constraint_loss_loss_param = 156;
+  inline bool has_orthogonal_constraint_loss_loss_param() const;
+  inline void clear_orthogonal_constraint_loss_loss_param();
+  static const int kOrthogonalConstraintLossLossParamFieldNumber = 156;
+  inline const ::caffe::OrthogonalConstraintLossParameter& orthogonal_constraint_loss_loss_param() const;
+  inline ::caffe::OrthogonalConstraintLossParameter* mutable_orthogonal_constraint_loss_loss_param();
+  inline ::caffe::OrthogonalConstraintLossParameter* release_orthogonal_constraint_loss_loss_param();
+  inline void set_allocated_orthogonal_constraint_loss_loss_param(::caffe::OrthogonalConstraintLossParameter* orthogonal_constraint_loss_loss_param);
+
   // @@protoc_insertion_point(class_scope:caffe.LayerParameter)
  private:
   inline void set_has_name();
@@ -3347,6 +3369,10 @@ class LayerParameter : public ::google::protobuf::Message {
   inline void clear_has_triplet_clip_hinge_loss_param();
   inline void set_has_video_temporal_pooling_param();
   inline void clear_has_video_temporal_pooling_param();
+  inline void set_has_balance_constraint_loss_param();
+  inline void clear_has_balance_constraint_loss_param();
+  inline void set_has_orthogonal_constraint_loss_loss_param();
+  inline void clear_has_orthogonal_constraint_loss_loss_param();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -3412,6 +3438,8 @@ class LayerParameter : public ::google::protobuf::Message {
   ::caffe::TripletRankingHingeLossParameter* triplet_ranking_hinge_loss_param_;
   ::caffe::TripletClipHingeLossParameter* triplet_clip_hinge_loss_param_;
   ::caffe::VideoTemporalPoolingParameter* video_temporal_pooling_param_;
+  ::caffe::BalanceConstraintLossParameter* balance_constraint_loss_param_;
+  ::caffe::OrthogonalConstraintLossParameter* orthogonal_constraint_loss_loss_param_;
   int phase_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_caffe_2eproto();
@@ -8520,6 +8548,184 @@ class TripletClipHingeLossParameter : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class BalanceConstraintLossParameter : public ::google::protobuf::Message {
+ public:
+  BalanceConstraintLossParameter();
+  virtual ~BalanceConstraintLossParameter();
+
+  BalanceConstraintLossParameter(const BalanceConstraintLossParameter& from);
+
+  inline BalanceConstraintLossParameter& operator=(const BalanceConstraintLossParameter& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const BalanceConstraintLossParameter& default_instance();
+
+  void Swap(BalanceConstraintLossParameter* other);
+
+  // implements Message ----------------------------------------------
+
+  BalanceConstraintLossParameter* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const BalanceConstraintLossParameter& from);
+  void MergeFrom(const BalanceConstraintLossParameter& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 dim = 1 [default = 12];
+  inline bool has_dim() const;
+  inline void clear_dim();
+  static const int kDimFieldNumber = 1;
+  inline ::google::protobuf::int32 dim() const;
+  inline void set_dim(::google::protobuf::int32 value);
+
+  // optional float lamda = 2 [default = 1];
+  inline bool has_lamda() const;
+  inline void clear_lamda();
+  static const int kLamdaFieldNumber = 2;
+  inline float lamda() const;
+  inline void set_lamda(float value);
+
+  // @@protoc_insertion_point(class_scope:caffe.BalanceConstraintLossParameter)
+ private:
+  inline void set_has_dim();
+  inline void clear_has_dim();
+  inline void set_has_lamda();
+  inline void clear_has_lamda();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::int32 dim_;
+  float lamda_;
+  friend void  protobuf_AddDesc_caffe_2eproto();
+  friend void protobuf_AssignDesc_caffe_2eproto();
+  friend void protobuf_ShutdownFile_caffe_2eproto();
+
+  void InitAsDefaultInstance();
+  static BalanceConstraintLossParameter* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class OrthogonalConstraintLossParameter : public ::google::protobuf::Message {
+ public:
+  OrthogonalConstraintLossParameter();
+  virtual ~OrthogonalConstraintLossParameter();
+
+  OrthogonalConstraintLossParameter(const OrthogonalConstraintLossParameter& from);
+
+  inline OrthogonalConstraintLossParameter& operator=(const OrthogonalConstraintLossParameter& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const OrthogonalConstraintLossParameter& default_instance();
+
+  void Swap(OrthogonalConstraintLossParameter* other);
+
+  // implements Message ----------------------------------------------
+
+  OrthogonalConstraintLossParameter* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const OrthogonalConstraintLossParameter& from);
+  void MergeFrom(const OrthogonalConstraintLossParameter& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 dim = 1 [default = 12];
+  inline bool has_dim() const;
+  inline void clear_dim();
+  static const int kDimFieldNumber = 1;
+  inline ::google::protobuf::int32 dim() const;
+  inline void set_dim(::google::protobuf::int32 value);
+
+  // optional float alpha = 2 [default = 1];
+  inline bool has_alpha() const;
+  inline void clear_alpha();
+  static const int kAlphaFieldNumber = 2;
+  inline float alpha() const;
+  inline void set_alpha(float value);
+
+  // @@protoc_insertion_point(class_scope:caffe.OrthogonalConstraintLossParameter)
+ private:
+  inline void set_has_dim();
+  inline void clear_has_dim();
+  inline void set_has_alpha();
+  inline void clear_has_alpha();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::int32 dim_;
+  float alpha_;
+  friend void  protobuf_AddDesc_caffe_2eproto();
+  friend void protobuf_AssignDesc_caffe_2eproto();
+  friend void protobuf_ShutdownFile_caffe_2eproto();
+
+  void InitAsDefaultInstance();
+  static OrthogonalConstraintLossParameter* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class SoftmaxParameter : public ::google::protobuf::Message {
  public:
   SoftmaxParameter();
@@ -9449,6 +9655,8 @@ class V1LayerParameter : public ::google::protobuf::Message {
   static const LayerType TRIPLET_RANKING_HINGE_LOSS = V1LayerParameter_LayerType_TRIPLET_RANKING_HINGE_LOSS;
   static const LayerType TRIPLET_CLIP_HINGE_LOSS = V1LayerParameter_LayerType_TRIPLET_CLIP_HINGE_LOSS;
   static const LayerType VIDEO_TEMPORAL_POOLING = V1LayerParameter_LayerType_VIDEO_TEMPORAL_POOLING;
+  static const LayerType BALANCE_CONSTRAINT_LOSS = V1LayerParameter_LayerType_BALANCE_CONSTRAINT_LOSS;
+  static const LayerType ORTHOGONAL_CONSTRAINT_LOSS = V1LayerParameter_LayerType_ORTHOGONAL_CONSTRAINT_LOSS;
   static const LayerType WINDOW_DATA = V1LayerParameter_LayerType_WINDOW_DATA;
   static inline bool LayerType_IsValid(int value) {
     return V1LayerParameter_LayerType_IsValid(value);
@@ -9952,6 +10160,24 @@ class V1LayerParameter : public ::google::protobuf::Message {
   inline ::caffe::VideoTemporalPoolingParameter* release_video_temporal_pooling_param();
   inline void set_allocated_video_temporal_pooling_param(::caffe::VideoTemporalPoolingParameter* video_temporal_pooling_param);
 
+  // optional .caffe.BalanceConstraintLossParameter balance_constraint_loss_param = 47;
+  inline bool has_balance_constraint_loss_param() const;
+  inline void clear_balance_constraint_loss_param();
+  static const int kBalanceConstraintLossParamFieldNumber = 47;
+  inline const ::caffe::BalanceConstraintLossParameter& balance_constraint_loss_param() const;
+  inline ::caffe::BalanceConstraintLossParameter* mutable_balance_constraint_loss_param();
+  inline ::caffe::BalanceConstraintLossParameter* release_balance_constraint_loss_param();
+  inline void set_allocated_balance_constraint_loss_param(::caffe::BalanceConstraintLossParameter* balance_constraint_loss_param);
+
+  // optional .caffe.OrthogonalConstraintLossParameter orthogonal_constraint_loss_loss_param = 48;
+  inline bool has_orthogonal_constraint_loss_loss_param() const;
+  inline void clear_orthogonal_constraint_loss_loss_param();
+  static const int kOrthogonalConstraintLossLossParamFieldNumber = 48;
+  inline const ::caffe::OrthogonalConstraintLossParameter& orthogonal_constraint_loss_loss_param() const;
+  inline ::caffe::OrthogonalConstraintLossParameter* mutable_orthogonal_constraint_loss_loss_param();
+  inline ::caffe::OrthogonalConstraintLossParameter* release_orthogonal_constraint_loss_loss_param();
+  inline void set_allocated_orthogonal_constraint_loss_loss_param(::caffe::OrthogonalConstraintLossParameter* orthogonal_constraint_loss_loss_param);
+
   // optional .caffe.V0LayerParameter layer = 1;
   inline bool has_layer() const;
   inline void clear_layer();
@@ -10035,6 +10261,10 @@ class V1LayerParameter : public ::google::protobuf::Message {
   inline void clear_has_triplet_clip_hinge_loss_param();
   inline void set_has_video_temporal_pooling_param();
   inline void clear_has_video_temporal_pooling_param();
+  inline void set_has_balance_constraint_loss_param();
+  inline void clear_has_balance_constraint_loss_param();
+  inline void set_has_orthogonal_constraint_loss_loss_param();
+  inline void clear_has_orthogonal_constraint_loss_loss_param();
   inline void set_has_layer();
   inline void clear_has_layer();
 
@@ -10086,6 +10316,8 @@ class V1LayerParameter : public ::google::protobuf::Message {
   ::caffe::PairWiseClipHingeLossParameter* pairwise_clip_hinge_loss_param_;
   ::caffe::TripletClipHingeLossParameter* triplet_clip_hinge_loss_param_;
   ::caffe::VideoTemporalPoolingParameter* video_temporal_pooling_param_;
+  ::caffe::BalanceConstraintLossParameter* balance_constraint_loss_param_;
+  ::caffe::OrthogonalConstraintLossParameter* orthogonal_constraint_loss_loss_param_;
   ::caffe::V0LayerParameter* layer_;
   int type_;
   mutable int _cached_size_;
@@ -16403,6 +16635,88 @@ inline void LayerParameter::set_allocated_video_temporal_pooling_param(::caffe::
   // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.video_temporal_pooling_param)
 }
 
+// optional .caffe.BalanceConstraintLossParameter balance_constraint_loss_param = 155;
+inline bool LayerParameter::has_balance_constraint_loss_param() const {
+  return (_has_bits_[1] & 0x40000000u) != 0;
+}
+inline void LayerParameter::set_has_balance_constraint_loss_param() {
+  _has_bits_[1] |= 0x40000000u;
+}
+inline void LayerParameter::clear_has_balance_constraint_loss_param() {
+  _has_bits_[1] &= ~0x40000000u;
+}
+inline void LayerParameter::clear_balance_constraint_loss_param() {
+  if (balance_constraint_loss_param_ != NULL) balance_constraint_loss_param_->::caffe::BalanceConstraintLossParameter::Clear();
+  clear_has_balance_constraint_loss_param();
+}
+inline const ::caffe::BalanceConstraintLossParameter& LayerParameter::balance_constraint_loss_param() const {
+  // @@protoc_insertion_point(field_get:caffe.LayerParameter.balance_constraint_loss_param)
+  return balance_constraint_loss_param_ != NULL ? *balance_constraint_loss_param_ : *default_instance_->balance_constraint_loss_param_;
+}
+inline ::caffe::BalanceConstraintLossParameter* LayerParameter::mutable_balance_constraint_loss_param() {
+  set_has_balance_constraint_loss_param();
+  if (balance_constraint_loss_param_ == NULL) balance_constraint_loss_param_ = new ::caffe::BalanceConstraintLossParameter;
+  // @@protoc_insertion_point(field_mutable:caffe.LayerParameter.balance_constraint_loss_param)
+  return balance_constraint_loss_param_;
+}
+inline ::caffe::BalanceConstraintLossParameter* LayerParameter::release_balance_constraint_loss_param() {
+  clear_has_balance_constraint_loss_param();
+  ::caffe::BalanceConstraintLossParameter* temp = balance_constraint_loss_param_;
+  balance_constraint_loss_param_ = NULL;
+  return temp;
+}
+inline void LayerParameter::set_allocated_balance_constraint_loss_param(::caffe::BalanceConstraintLossParameter* balance_constraint_loss_param) {
+  delete balance_constraint_loss_param_;
+  balance_constraint_loss_param_ = balance_constraint_loss_param;
+  if (balance_constraint_loss_param) {
+    set_has_balance_constraint_loss_param();
+  } else {
+    clear_has_balance_constraint_loss_param();
+  }
+  // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.balance_constraint_loss_param)
+}
+
+// optional .caffe.OrthogonalConstraintLossParameter orthogonal_constraint_loss_loss_param = 156;
+inline bool LayerParameter::has_orthogonal_constraint_loss_loss_param() const {
+  return (_has_bits_[1] & 0x80000000u) != 0;
+}
+inline void LayerParameter::set_has_orthogonal_constraint_loss_loss_param() {
+  _has_bits_[1] |= 0x80000000u;
+}
+inline void LayerParameter::clear_has_orthogonal_constraint_loss_loss_param() {
+  _has_bits_[1] &= ~0x80000000u;
+}
+inline void LayerParameter::clear_orthogonal_constraint_loss_loss_param() {
+  if (orthogonal_constraint_loss_loss_param_ != NULL) orthogonal_constraint_loss_loss_param_->::caffe::OrthogonalConstraintLossParameter::Clear();
+  clear_has_orthogonal_constraint_loss_loss_param();
+}
+inline const ::caffe::OrthogonalConstraintLossParameter& LayerParameter::orthogonal_constraint_loss_loss_param() const {
+  // @@protoc_insertion_point(field_get:caffe.LayerParameter.orthogonal_constraint_loss_loss_param)
+  return orthogonal_constraint_loss_loss_param_ != NULL ? *orthogonal_constraint_loss_loss_param_ : *default_instance_->orthogonal_constraint_loss_loss_param_;
+}
+inline ::caffe::OrthogonalConstraintLossParameter* LayerParameter::mutable_orthogonal_constraint_loss_loss_param() {
+  set_has_orthogonal_constraint_loss_loss_param();
+  if (orthogonal_constraint_loss_loss_param_ == NULL) orthogonal_constraint_loss_loss_param_ = new ::caffe::OrthogonalConstraintLossParameter;
+  // @@protoc_insertion_point(field_mutable:caffe.LayerParameter.orthogonal_constraint_loss_loss_param)
+  return orthogonal_constraint_loss_loss_param_;
+}
+inline ::caffe::OrthogonalConstraintLossParameter* LayerParameter::release_orthogonal_constraint_loss_loss_param() {
+  clear_has_orthogonal_constraint_loss_loss_param();
+  ::caffe::OrthogonalConstraintLossParameter* temp = orthogonal_constraint_loss_loss_param_;
+  orthogonal_constraint_loss_loss_param_ = NULL;
+  return temp;
+}
+inline void LayerParameter::set_allocated_orthogonal_constraint_loss_loss_param(::caffe::OrthogonalConstraintLossParameter* orthogonal_constraint_loss_loss_param) {
+  delete orthogonal_constraint_loss_loss_param_;
+  orthogonal_constraint_loss_loss_param_ = orthogonal_constraint_loss_loss_param;
+  if (orthogonal_constraint_loss_loss_param) {
+    set_has_orthogonal_constraint_loss_loss_param();
+  } else {
+    clear_has_orthogonal_constraint_loss_loss_param();
+  }
+  // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.orthogonal_constraint_loss_loss_param)
+}
+
 // -------------------------------------------------------------------
 
 // TransformationParameter
@@ -21604,6 +21918,110 @@ inline void TripletClipHingeLossParameter::set_lamda(float value) {
 
 // -------------------------------------------------------------------
 
+// BalanceConstraintLossParameter
+
+// optional int32 dim = 1 [default = 12];
+inline bool BalanceConstraintLossParameter::has_dim() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void BalanceConstraintLossParameter::set_has_dim() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void BalanceConstraintLossParameter::clear_has_dim() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void BalanceConstraintLossParameter::clear_dim() {
+  dim_ = 12;
+  clear_has_dim();
+}
+inline ::google::protobuf::int32 BalanceConstraintLossParameter::dim() const {
+  // @@protoc_insertion_point(field_get:caffe.BalanceConstraintLossParameter.dim)
+  return dim_;
+}
+inline void BalanceConstraintLossParameter::set_dim(::google::protobuf::int32 value) {
+  set_has_dim();
+  dim_ = value;
+  // @@protoc_insertion_point(field_set:caffe.BalanceConstraintLossParameter.dim)
+}
+
+// optional float lamda = 2 [default = 1];
+inline bool BalanceConstraintLossParameter::has_lamda() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void BalanceConstraintLossParameter::set_has_lamda() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void BalanceConstraintLossParameter::clear_has_lamda() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void BalanceConstraintLossParameter::clear_lamda() {
+  lamda_ = 1;
+  clear_has_lamda();
+}
+inline float BalanceConstraintLossParameter::lamda() const {
+  // @@protoc_insertion_point(field_get:caffe.BalanceConstraintLossParameter.lamda)
+  return lamda_;
+}
+inline void BalanceConstraintLossParameter::set_lamda(float value) {
+  set_has_lamda();
+  lamda_ = value;
+  // @@protoc_insertion_point(field_set:caffe.BalanceConstraintLossParameter.lamda)
+}
+
+// -------------------------------------------------------------------
+
+// OrthogonalConstraintLossParameter
+
+// optional int32 dim = 1 [default = 12];
+inline bool OrthogonalConstraintLossParameter::has_dim() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void OrthogonalConstraintLossParameter::set_has_dim() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void OrthogonalConstraintLossParameter::clear_has_dim() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void OrthogonalConstraintLossParameter::clear_dim() {
+  dim_ = 12;
+  clear_has_dim();
+}
+inline ::google::protobuf::int32 OrthogonalConstraintLossParameter::dim() const {
+  // @@protoc_insertion_point(field_get:caffe.OrthogonalConstraintLossParameter.dim)
+  return dim_;
+}
+inline void OrthogonalConstraintLossParameter::set_dim(::google::protobuf::int32 value) {
+  set_has_dim();
+  dim_ = value;
+  // @@protoc_insertion_point(field_set:caffe.OrthogonalConstraintLossParameter.dim)
+}
+
+// optional float alpha = 2 [default = 1];
+inline bool OrthogonalConstraintLossParameter::has_alpha() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void OrthogonalConstraintLossParameter::set_has_alpha() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void OrthogonalConstraintLossParameter::clear_has_alpha() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void OrthogonalConstraintLossParameter::clear_alpha() {
+  alpha_ = 1;
+  clear_has_alpha();
+}
+inline float OrthogonalConstraintLossParameter::alpha() const {
+  // @@protoc_insertion_point(field_get:caffe.OrthogonalConstraintLossParameter.alpha)
+  return alpha_;
+}
+inline void OrthogonalConstraintLossParameter::set_alpha(float value) {
+  set_has_alpha();
+  alpha_ = value;
+  // @@protoc_insertion_point(field_set:caffe.OrthogonalConstraintLossParameter.alpha)
+}
+
+// -------------------------------------------------------------------
+
 // SoftmaxParameter
 
 // optional .caffe.SoftmaxParameter.Engine engine = 1 [default = DEFAULT];
@@ -24267,15 +24685,97 @@ inline void V1LayerParameter::set_allocated_video_temporal_pooling_param(::caffe
   // @@protoc_insertion_point(field_set_allocated:caffe.V1LayerParameter.video_temporal_pooling_param)
 }
 
-// optional .caffe.V0LayerParameter layer = 1;
-inline bool V1LayerParameter::has_layer() const {
+// optional .caffe.BalanceConstraintLossParameter balance_constraint_loss_param = 47;
+inline bool V1LayerParameter::has_balance_constraint_loss_param() const {
   return (_has_bits_[1] & 0x00004000u) != 0;
 }
-inline void V1LayerParameter::set_has_layer() {
+inline void V1LayerParameter::set_has_balance_constraint_loss_param() {
   _has_bits_[1] |= 0x00004000u;
 }
-inline void V1LayerParameter::clear_has_layer() {
+inline void V1LayerParameter::clear_has_balance_constraint_loss_param() {
   _has_bits_[1] &= ~0x00004000u;
+}
+inline void V1LayerParameter::clear_balance_constraint_loss_param() {
+  if (balance_constraint_loss_param_ != NULL) balance_constraint_loss_param_->::caffe::BalanceConstraintLossParameter::Clear();
+  clear_has_balance_constraint_loss_param();
+}
+inline const ::caffe::BalanceConstraintLossParameter& V1LayerParameter::balance_constraint_loss_param() const {
+  // @@protoc_insertion_point(field_get:caffe.V1LayerParameter.balance_constraint_loss_param)
+  return balance_constraint_loss_param_ != NULL ? *balance_constraint_loss_param_ : *default_instance_->balance_constraint_loss_param_;
+}
+inline ::caffe::BalanceConstraintLossParameter* V1LayerParameter::mutable_balance_constraint_loss_param() {
+  set_has_balance_constraint_loss_param();
+  if (balance_constraint_loss_param_ == NULL) balance_constraint_loss_param_ = new ::caffe::BalanceConstraintLossParameter;
+  // @@protoc_insertion_point(field_mutable:caffe.V1LayerParameter.balance_constraint_loss_param)
+  return balance_constraint_loss_param_;
+}
+inline ::caffe::BalanceConstraintLossParameter* V1LayerParameter::release_balance_constraint_loss_param() {
+  clear_has_balance_constraint_loss_param();
+  ::caffe::BalanceConstraintLossParameter* temp = balance_constraint_loss_param_;
+  balance_constraint_loss_param_ = NULL;
+  return temp;
+}
+inline void V1LayerParameter::set_allocated_balance_constraint_loss_param(::caffe::BalanceConstraintLossParameter* balance_constraint_loss_param) {
+  delete balance_constraint_loss_param_;
+  balance_constraint_loss_param_ = balance_constraint_loss_param;
+  if (balance_constraint_loss_param) {
+    set_has_balance_constraint_loss_param();
+  } else {
+    clear_has_balance_constraint_loss_param();
+  }
+  // @@protoc_insertion_point(field_set_allocated:caffe.V1LayerParameter.balance_constraint_loss_param)
+}
+
+// optional .caffe.OrthogonalConstraintLossParameter orthogonal_constraint_loss_loss_param = 48;
+inline bool V1LayerParameter::has_orthogonal_constraint_loss_loss_param() const {
+  return (_has_bits_[1] & 0x00008000u) != 0;
+}
+inline void V1LayerParameter::set_has_orthogonal_constraint_loss_loss_param() {
+  _has_bits_[1] |= 0x00008000u;
+}
+inline void V1LayerParameter::clear_has_orthogonal_constraint_loss_loss_param() {
+  _has_bits_[1] &= ~0x00008000u;
+}
+inline void V1LayerParameter::clear_orthogonal_constraint_loss_loss_param() {
+  if (orthogonal_constraint_loss_loss_param_ != NULL) orthogonal_constraint_loss_loss_param_->::caffe::OrthogonalConstraintLossParameter::Clear();
+  clear_has_orthogonal_constraint_loss_loss_param();
+}
+inline const ::caffe::OrthogonalConstraintLossParameter& V1LayerParameter::orthogonal_constraint_loss_loss_param() const {
+  // @@protoc_insertion_point(field_get:caffe.V1LayerParameter.orthogonal_constraint_loss_loss_param)
+  return orthogonal_constraint_loss_loss_param_ != NULL ? *orthogonal_constraint_loss_loss_param_ : *default_instance_->orthogonal_constraint_loss_loss_param_;
+}
+inline ::caffe::OrthogonalConstraintLossParameter* V1LayerParameter::mutable_orthogonal_constraint_loss_loss_param() {
+  set_has_orthogonal_constraint_loss_loss_param();
+  if (orthogonal_constraint_loss_loss_param_ == NULL) orthogonal_constraint_loss_loss_param_ = new ::caffe::OrthogonalConstraintLossParameter;
+  // @@protoc_insertion_point(field_mutable:caffe.V1LayerParameter.orthogonal_constraint_loss_loss_param)
+  return orthogonal_constraint_loss_loss_param_;
+}
+inline ::caffe::OrthogonalConstraintLossParameter* V1LayerParameter::release_orthogonal_constraint_loss_loss_param() {
+  clear_has_orthogonal_constraint_loss_loss_param();
+  ::caffe::OrthogonalConstraintLossParameter* temp = orthogonal_constraint_loss_loss_param_;
+  orthogonal_constraint_loss_loss_param_ = NULL;
+  return temp;
+}
+inline void V1LayerParameter::set_allocated_orthogonal_constraint_loss_loss_param(::caffe::OrthogonalConstraintLossParameter* orthogonal_constraint_loss_loss_param) {
+  delete orthogonal_constraint_loss_loss_param_;
+  orthogonal_constraint_loss_loss_param_ = orthogonal_constraint_loss_loss_param;
+  if (orthogonal_constraint_loss_loss_param) {
+    set_has_orthogonal_constraint_loss_loss_param();
+  } else {
+    clear_has_orthogonal_constraint_loss_loss_param();
+  }
+  // @@protoc_insertion_point(field_set_allocated:caffe.V1LayerParameter.orthogonal_constraint_loss_loss_param)
+}
+
+// optional .caffe.V0LayerParameter layer = 1;
+inline bool V1LayerParameter::has_layer() const {
+  return (_has_bits_[1] & 0x00010000u) != 0;
+}
+inline void V1LayerParameter::set_has_layer() {
+  _has_bits_[1] |= 0x00010000u;
+}
+inline void V1LayerParameter::clear_has_layer() {
+  _has_bits_[1] &= ~0x00010000u;
 }
 inline void V1LayerParameter::clear_layer() {
   if (layer_ != NULL) layer_->::caffe::V0LayerParameter::Clear();

@@ -408,6 +408,8 @@ message LayerParameter {
   optional TripletRankingHingeLossParameter triplet_ranking_hinge_loss_param = 151;
   optional TripletClipHingeLossParameter triplet_clip_hinge_loss_param = 153;
   optional VideoTemporalPoolingParameter video_temporal_pooling_param = 154;
+  optional BalanceConstraintLossParameter balance_constraint_loss_param = 155;
+  optional OrthogonalConstraintLossParameter orthogonal_constraint_loss_loss_param = 156;
 }
 
 // Message that stores parameters used to apply transformation
@@ -1153,6 +1155,22 @@ message TripletClipHingeLossParameter{
   optional float lamda = 4 [default = 0.5];
 }
 
+// Message that stores parameters used by BalanceConstraintLossLayer
+message BalanceConstraintLossParameter{
+  // Dimension for computing
+  optional int32 dim = 1 [default = 12];
+  // lamda
+  optional float lamda = 2 [default = 1.0];
+}
+
+// Message that stores parameters used by OrthogonalConstraintLossLayer
+message OrthogonalConstraintLossParameter{
+ // Dimension for computing
+ optional int32 dim = 1 [default = 12];
+ // alpha for the scale setting
+ optional float alpha = 2 [default = 1];
+}
+
 // Message that stores parameters used by SoftmaxLayer, SoftmaxWithLossLayer
 message SoftmaxParameter {
   enum Engine {
@@ -1297,6 +1315,8 @@ message V1LayerParameter {
 	TRIPLET_RANKING_HINGE_LOSS=40;
 	TRIPLET_CLIP_HINGE_LOSS=42;
 	VIDEO_TEMPORAL_POOLING=43;
+	BALANCE_CONSTRAINT_LOSS=44;
+	ORTHOGONAL_CONSTRAINT_LOSS=45;
     WINDOW_DATA = 24;
   }
   optional LayerType type = 5;
@@ -1344,6 +1364,8 @@ message V1LayerParameter {
   optional PairWiseClipHingeLossParameter pairwise_clip_hinge_loss_param = 44;
   optional TripletClipHingeLossParameter triplet_clip_hinge_loss_param = 45;
   optional VideoTemporalPoolingParameter video_temporal_pooling_param=46;
+  optional BalanceConstraintLossParameter balance_constraint_loss_param=47;
+  optional OrthogonalConstraintLossParameter orthogonal_constraint_loss_loss_param=48;
   optional V0LayerParameter layer = 1;
 }
 
