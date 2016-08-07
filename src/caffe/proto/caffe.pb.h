@@ -91,6 +91,8 @@ class PairWiseClipHingeLossParameter;
 class TripletClipHingeLossParameter;
 class BalanceConstraintLossParameter;
 class OrthogonalConstraintLossParameter;
+class ResidualQuantizationParameter;
+class WeightPlusParameter;
 class SoftmaxParameter;
 class TanHParameter;
 class TileParameter;
@@ -567,11 +569,13 @@ enum V1LayerParameter_LayerType {
   V1LayerParameter_LayerType_VIDEO_TEMPORAL_POOLING = 43,
   V1LayerParameter_LayerType_BALANCE_CONSTRAINT_LOSS = 44,
   V1LayerParameter_LayerType_ORTHOGONAL_CONSTRAINT_LOSS = 45,
+  V1LayerParameter_LayerType_RESIDUAL_QUANTIZATION = 46,
+  V1LayerParameter_LayerType_WEIGHT_PLUS = 47,
   V1LayerParameter_LayerType_WINDOW_DATA = 24
 };
 bool V1LayerParameter_LayerType_IsValid(int value);
 const V1LayerParameter_LayerType V1LayerParameter_LayerType_LayerType_MIN = V1LayerParameter_LayerType_NONE;
-const V1LayerParameter_LayerType V1LayerParameter_LayerType_LayerType_MAX = V1LayerParameter_LayerType_ORTHOGONAL_CONSTRAINT_LOSS;
+const V1LayerParameter_LayerType V1LayerParameter_LayerType_LayerType_MAX = V1LayerParameter_LayerType_WEIGHT_PLUS;
 const int V1LayerParameter_LayerType_LayerType_ARRAYSIZE = V1LayerParameter_LayerType_LayerType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* V1LayerParameter_LayerType_descriptor();
@@ -3259,6 +3263,24 @@ class LayerParameter : public ::google::protobuf::Message {
   inline ::caffe::OrthogonalConstraintLossParameter* release_orthogonal_constraint_loss_loss_param();
   inline void set_allocated_orthogonal_constraint_loss_loss_param(::caffe::OrthogonalConstraintLossParameter* orthogonal_constraint_loss_loss_param);
 
+  // optional .caffe.ResidualQuantizationParameter residual_quantization_param = 157;
+  inline bool has_residual_quantization_param() const;
+  inline void clear_residual_quantization_param();
+  static const int kResidualQuantizationParamFieldNumber = 157;
+  inline const ::caffe::ResidualQuantizationParameter& residual_quantization_param() const;
+  inline ::caffe::ResidualQuantizationParameter* mutable_residual_quantization_param();
+  inline ::caffe::ResidualQuantizationParameter* release_residual_quantization_param();
+  inline void set_allocated_residual_quantization_param(::caffe::ResidualQuantizationParameter* residual_quantization_param);
+
+  // optional .caffe.WeightPlusParameter weight_plus_param = 158;
+  inline bool has_weight_plus_param() const;
+  inline void clear_weight_plus_param();
+  static const int kWeightPlusParamFieldNumber = 158;
+  inline const ::caffe::WeightPlusParameter& weight_plus_param() const;
+  inline ::caffe::WeightPlusParameter* mutable_weight_plus_param();
+  inline ::caffe::WeightPlusParameter* release_weight_plus_param();
+  inline void set_allocated_weight_plus_param(::caffe::WeightPlusParameter* weight_plus_param);
+
   // @@protoc_insertion_point(class_scope:caffe.LayerParameter)
  private:
   inline void set_has_name();
@@ -3373,10 +3395,15 @@ class LayerParameter : public ::google::protobuf::Message {
   inline void clear_has_balance_constraint_loss_param();
   inline void set_has_orthogonal_constraint_loss_loss_param();
   inline void clear_has_orthogonal_constraint_loss_loss_param();
+  inline void set_has_residual_quantization_param();
+  inline void clear_has_residual_quantization_param();
+  inline void set_has_weight_plus_param();
+  inline void clear_has_weight_plus_param();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
-  ::google::protobuf::uint32 _has_bits_[2];
+  ::google::protobuf::uint32 _has_bits_[3];
+  mutable int _cached_size_;
   ::std::string* name_;
   ::std::string* type_;
   ::google::protobuf::RepeatedPtrField< ::std::string> bottom_;
@@ -3440,8 +3467,9 @@ class LayerParameter : public ::google::protobuf::Message {
   ::caffe::VideoTemporalPoolingParameter* video_temporal_pooling_param_;
   ::caffe::BalanceConstraintLossParameter* balance_constraint_loss_param_;
   ::caffe::OrthogonalConstraintLossParameter* orthogonal_constraint_loss_loss_param_;
+  ::caffe::ResidualQuantizationParameter* residual_quantization_param_;
+  ::caffe::WeightPlusParameter* weight_plus_param_;
   int phase_;
-  mutable int _cached_size_;
   friend void  protobuf_AddDesc_caffe_2eproto();
   friend void protobuf_AssignDesc_caffe_2eproto();
   friend void protobuf_ShutdownFile_caffe_2eproto();
@@ -8726,6 +8754,186 @@ class OrthogonalConstraintLossParameter : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class ResidualQuantizationParameter : public ::google::protobuf::Message {
+ public:
+  ResidualQuantizationParameter();
+  virtual ~ResidualQuantizationParameter();
+
+  ResidualQuantizationParameter(const ResidualQuantizationParameter& from);
+
+  inline ResidualQuantizationParameter& operator=(const ResidualQuantizationParameter& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ResidualQuantizationParameter& default_instance();
+
+  void Swap(ResidualQuantizationParameter* other);
+
+  // implements Message ----------------------------------------------
+
+  ResidualQuantizationParameter* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ResidualQuantizationParameter& from);
+  void MergeFrom(const ResidualQuantizationParameter& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional float lamda = 1 [default = 1];
+  inline bool has_lamda() const;
+  inline void clear_lamda();
+  static const int kLamdaFieldNumber = 1;
+  inline float lamda() const;
+  inline void set_lamda(float value);
+
+  // @@protoc_insertion_point(class_scope:caffe.ResidualQuantizationParameter)
+ private:
+  inline void set_has_lamda();
+  inline void clear_has_lamda();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  float lamda_;
+  friend void  protobuf_AddDesc_caffe_2eproto();
+  friend void protobuf_AssignDesc_caffe_2eproto();
+  friend void protobuf_ShutdownFile_caffe_2eproto();
+
+  void InitAsDefaultInstance();
+  static ResidualQuantizationParameter* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class WeightPlusParameter : public ::google::protobuf::Message {
+ public:
+  WeightPlusParameter();
+  virtual ~WeightPlusParameter();
+
+  WeightPlusParameter(const WeightPlusParameter& from);
+
+  inline WeightPlusParameter& operator=(const WeightPlusParameter& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const WeightPlusParameter& default_instance();
+
+  void Swap(WeightPlusParameter* other);
+
+  // implements Message ----------------------------------------------
+
+  WeightPlusParameter* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const WeightPlusParameter& from);
+  void MergeFrom(const WeightPlusParameter& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 dim = 1 [default = 12];
+  inline bool has_dim() const;
+  inline void clear_dim();
+  static const int kDimFieldNumber = 1;
+  inline ::google::protobuf::int32 dim() const;
+  inline void set_dim(::google::protobuf::int32 value);
+
+  // optional bool output_flag = 2 [default = false];
+  inline bool has_output_flag() const;
+  inline void clear_output_flag();
+  static const int kOutputFlagFieldNumber = 2;
+  inline bool output_flag() const;
+  inline void set_output_flag(bool value);
+
+  // optional .caffe.FillerParameter weight_filler = 3;
+  inline bool has_weight_filler() const;
+  inline void clear_weight_filler();
+  static const int kWeightFillerFieldNumber = 3;
+  inline const ::caffe::FillerParameter& weight_filler() const;
+  inline ::caffe::FillerParameter* mutable_weight_filler();
+  inline ::caffe::FillerParameter* release_weight_filler();
+  inline void set_allocated_weight_filler(::caffe::FillerParameter* weight_filler);
+
+  // @@protoc_insertion_point(class_scope:caffe.WeightPlusParameter)
+ private:
+  inline void set_has_dim();
+  inline void clear_has_dim();
+  inline void set_has_output_flag();
+  inline void clear_has_output_flag();
+  inline void set_has_weight_filler();
+  inline void clear_has_weight_filler();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::int32 dim_;
+  bool output_flag_;
+  ::caffe::FillerParameter* weight_filler_;
+  friend void  protobuf_AddDesc_caffe_2eproto();
+  friend void protobuf_AssignDesc_caffe_2eproto();
+  friend void protobuf_ShutdownFile_caffe_2eproto();
+
+  void InitAsDefaultInstance();
+  static WeightPlusParameter* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class SoftmaxParameter : public ::google::protobuf::Message {
  public:
   SoftmaxParameter();
@@ -9657,6 +9865,8 @@ class V1LayerParameter : public ::google::protobuf::Message {
   static const LayerType VIDEO_TEMPORAL_POOLING = V1LayerParameter_LayerType_VIDEO_TEMPORAL_POOLING;
   static const LayerType BALANCE_CONSTRAINT_LOSS = V1LayerParameter_LayerType_BALANCE_CONSTRAINT_LOSS;
   static const LayerType ORTHOGONAL_CONSTRAINT_LOSS = V1LayerParameter_LayerType_ORTHOGONAL_CONSTRAINT_LOSS;
+  static const LayerType RESIDUAL_QUANTIZATION = V1LayerParameter_LayerType_RESIDUAL_QUANTIZATION;
+  static const LayerType WEIGHT_PLUS = V1LayerParameter_LayerType_WEIGHT_PLUS;
   static const LayerType WINDOW_DATA = V1LayerParameter_LayerType_WINDOW_DATA;
   static inline bool LayerType_IsValid(int value) {
     return V1LayerParameter_LayerType_IsValid(value);
@@ -10178,6 +10388,24 @@ class V1LayerParameter : public ::google::protobuf::Message {
   inline ::caffe::OrthogonalConstraintLossParameter* release_orthogonal_constraint_loss_loss_param();
   inline void set_allocated_orthogonal_constraint_loss_loss_param(::caffe::OrthogonalConstraintLossParameter* orthogonal_constraint_loss_loss_param);
 
+  // optional .caffe.ResidualQuantizationParameter residual_quantization_param = 49;
+  inline bool has_residual_quantization_param() const;
+  inline void clear_residual_quantization_param();
+  static const int kResidualQuantizationParamFieldNumber = 49;
+  inline const ::caffe::ResidualQuantizationParameter& residual_quantization_param() const;
+  inline ::caffe::ResidualQuantizationParameter* mutable_residual_quantization_param();
+  inline ::caffe::ResidualQuantizationParameter* release_residual_quantization_param();
+  inline void set_allocated_residual_quantization_param(::caffe::ResidualQuantizationParameter* residual_quantization_param);
+
+  // optional .caffe.WeightPlusParameter weight_plus_param = 50;
+  inline bool has_weight_plus_param() const;
+  inline void clear_weight_plus_param();
+  static const int kWeightPlusParamFieldNumber = 50;
+  inline const ::caffe::WeightPlusParameter& weight_plus_param() const;
+  inline ::caffe::WeightPlusParameter* mutable_weight_plus_param();
+  inline ::caffe::WeightPlusParameter* release_weight_plus_param();
+  inline void set_allocated_weight_plus_param(::caffe::WeightPlusParameter* weight_plus_param);
+
   // optional .caffe.V0LayerParameter layer = 1;
   inline bool has_layer() const;
   inline void clear_layer();
@@ -10265,6 +10493,10 @@ class V1LayerParameter : public ::google::protobuf::Message {
   inline void clear_has_balance_constraint_loss_param();
   inline void set_has_orthogonal_constraint_loss_loss_param();
   inline void clear_has_orthogonal_constraint_loss_loss_param();
+  inline void set_has_residual_quantization_param();
+  inline void clear_has_residual_quantization_param();
+  inline void set_has_weight_plus_param();
+  inline void clear_has_weight_plus_param();
   inline void set_has_layer();
   inline void clear_has_layer();
 
@@ -10318,6 +10550,8 @@ class V1LayerParameter : public ::google::protobuf::Message {
   ::caffe::VideoTemporalPoolingParameter* video_temporal_pooling_param_;
   ::caffe::BalanceConstraintLossParameter* balance_constraint_loss_param_;
   ::caffe::OrthogonalConstraintLossParameter* orthogonal_constraint_loss_loss_param_;
+  ::caffe::ResidualQuantizationParameter* residual_quantization_param_;
+  ::caffe::WeightPlusParameter* weight_plus_param_;
   ::caffe::V0LayerParameter* layer_;
   int type_;
   mutable int _cached_size_;
@@ -16717,6 +16951,88 @@ inline void LayerParameter::set_allocated_orthogonal_constraint_loss_loss_param(
   // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.orthogonal_constraint_loss_loss_param)
 }
 
+// optional .caffe.ResidualQuantizationParameter residual_quantization_param = 157;
+inline bool LayerParameter::has_residual_quantization_param() const {
+  return (_has_bits_[2] & 0x00000001u) != 0;
+}
+inline void LayerParameter::set_has_residual_quantization_param() {
+  _has_bits_[2] |= 0x00000001u;
+}
+inline void LayerParameter::clear_has_residual_quantization_param() {
+  _has_bits_[2] &= ~0x00000001u;
+}
+inline void LayerParameter::clear_residual_quantization_param() {
+  if (residual_quantization_param_ != NULL) residual_quantization_param_->::caffe::ResidualQuantizationParameter::Clear();
+  clear_has_residual_quantization_param();
+}
+inline const ::caffe::ResidualQuantizationParameter& LayerParameter::residual_quantization_param() const {
+  // @@protoc_insertion_point(field_get:caffe.LayerParameter.residual_quantization_param)
+  return residual_quantization_param_ != NULL ? *residual_quantization_param_ : *default_instance_->residual_quantization_param_;
+}
+inline ::caffe::ResidualQuantizationParameter* LayerParameter::mutable_residual_quantization_param() {
+  set_has_residual_quantization_param();
+  if (residual_quantization_param_ == NULL) residual_quantization_param_ = new ::caffe::ResidualQuantizationParameter;
+  // @@protoc_insertion_point(field_mutable:caffe.LayerParameter.residual_quantization_param)
+  return residual_quantization_param_;
+}
+inline ::caffe::ResidualQuantizationParameter* LayerParameter::release_residual_quantization_param() {
+  clear_has_residual_quantization_param();
+  ::caffe::ResidualQuantizationParameter* temp = residual_quantization_param_;
+  residual_quantization_param_ = NULL;
+  return temp;
+}
+inline void LayerParameter::set_allocated_residual_quantization_param(::caffe::ResidualQuantizationParameter* residual_quantization_param) {
+  delete residual_quantization_param_;
+  residual_quantization_param_ = residual_quantization_param;
+  if (residual_quantization_param) {
+    set_has_residual_quantization_param();
+  } else {
+    clear_has_residual_quantization_param();
+  }
+  // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.residual_quantization_param)
+}
+
+// optional .caffe.WeightPlusParameter weight_plus_param = 158;
+inline bool LayerParameter::has_weight_plus_param() const {
+  return (_has_bits_[2] & 0x00000002u) != 0;
+}
+inline void LayerParameter::set_has_weight_plus_param() {
+  _has_bits_[2] |= 0x00000002u;
+}
+inline void LayerParameter::clear_has_weight_plus_param() {
+  _has_bits_[2] &= ~0x00000002u;
+}
+inline void LayerParameter::clear_weight_plus_param() {
+  if (weight_plus_param_ != NULL) weight_plus_param_->::caffe::WeightPlusParameter::Clear();
+  clear_has_weight_plus_param();
+}
+inline const ::caffe::WeightPlusParameter& LayerParameter::weight_plus_param() const {
+  // @@protoc_insertion_point(field_get:caffe.LayerParameter.weight_plus_param)
+  return weight_plus_param_ != NULL ? *weight_plus_param_ : *default_instance_->weight_plus_param_;
+}
+inline ::caffe::WeightPlusParameter* LayerParameter::mutable_weight_plus_param() {
+  set_has_weight_plus_param();
+  if (weight_plus_param_ == NULL) weight_plus_param_ = new ::caffe::WeightPlusParameter;
+  // @@protoc_insertion_point(field_mutable:caffe.LayerParameter.weight_plus_param)
+  return weight_plus_param_;
+}
+inline ::caffe::WeightPlusParameter* LayerParameter::release_weight_plus_param() {
+  clear_has_weight_plus_param();
+  ::caffe::WeightPlusParameter* temp = weight_plus_param_;
+  weight_plus_param_ = NULL;
+  return temp;
+}
+inline void LayerParameter::set_allocated_weight_plus_param(::caffe::WeightPlusParameter* weight_plus_param) {
+  delete weight_plus_param_;
+  weight_plus_param_ = weight_plus_param;
+  if (weight_plus_param) {
+    set_has_weight_plus_param();
+  } else {
+    clear_has_weight_plus_param();
+  }
+  // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.weight_plus_param)
+}
+
 // -------------------------------------------------------------------
 
 // TransformationParameter
@@ -22022,6 +22338,127 @@ inline void OrthogonalConstraintLossParameter::set_alpha(float value) {
 
 // -------------------------------------------------------------------
 
+// ResidualQuantizationParameter
+
+// optional float lamda = 1 [default = 1];
+inline bool ResidualQuantizationParameter::has_lamda() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ResidualQuantizationParameter::set_has_lamda() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ResidualQuantizationParameter::clear_has_lamda() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ResidualQuantizationParameter::clear_lamda() {
+  lamda_ = 1;
+  clear_has_lamda();
+}
+inline float ResidualQuantizationParameter::lamda() const {
+  // @@protoc_insertion_point(field_get:caffe.ResidualQuantizationParameter.lamda)
+  return lamda_;
+}
+inline void ResidualQuantizationParameter::set_lamda(float value) {
+  set_has_lamda();
+  lamda_ = value;
+  // @@protoc_insertion_point(field_set:caffe.ResidualQuantizationParameter.lamda)
+}
+
+// -------------------------------------------------------------------
+
+// WeightPlusParameter
+
+// optional int32 dim = 1 [default = 12];
+inline bool WeightPlusParameter::has_dim() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void WeightPlusParameter::set_has_dim() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void WeightPlusParameter::clear_has_dim() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void WeightPlusParameter::clear_dim() {
+  dim_ = 12;
+  clear_has_dim();
+}
+inline ::google::protobuf::int32 WeightPlusParameter::dim() const {
+  // @@protoc_insertion_point(field_get:caffe.WeightPlusParameter.dim)
+  return dim_;
+}
+inline void WeightPlusParameter::set_dim(::google::protobuf::int32 value) {
+  set_has_dim();
+  dim_ = value;
+  // @@protoc_insertion_point(field_set:caffe.WeightPlusParameter.dim)
+}
+
+// optional bool output_flag = 2 [default = false];
+inline bool WeightPlusParameter::has_output_flag() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void WeightPlusParameter::set_has_output_flag() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void WeightPlusParameter::clear_has_output_flag() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void WeightPlusParameter::clear_output_flag() {
+  output_flag_ = false;
+  clear_has_output_flag();
+}
+inline bool WeightPlusParameter::output_flag() const {
+  // @@protoc_insertion_point(field_get:caffe.WeightPlusParameter.output_flag)
+  return output_flag_;
+}
+inline void WeightPlusParameter::set_output_flag(bool value) {
+  set_has_output_flag();
+  output_flag_ = value;
+  // @@protoc_insertion_point(field_set:caffe.WeightPlusParameter.output_flag)
+}
+
+// optional .caffe.FillerParameter weight_filler = 3;
+inline bool WeightPlusParameter::has_weight_filler() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void WeightPlusParameter::set_has_weight_filler() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void WeightPlusParameter::clear_has_weight_filler() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void WeightPlusParameter::clear_weight_filler() {
+  if (weight_filler_ != NULL) weight_filler_->::caffe::FillerParameter::Clear();
+  clear_has_weight_filler();
+}
+inline const ::caffe::FillerParameter& WeightPlusParameter::weight_filler() const {
+  // @@protoc_insertion_point(field_get:caffe.WeightPlusParameter.weight_filler)
+  return weight_filler_ != NULL ? *weight_filler_ : *default_instance_->weight_filler_;
+}
+inline ::caffe::FillerParameter* WeightPlusParameter::mutable_weight_filler() {
+  set_has_weight_filler();
+  if (weight_filler_ == NULL) weight_filler_ = new ::caffe::FillerParameter;
+  // @@protoc_insertion_point(field_mutable:caffe.WeightPlusParameter.weight_filler)
+  return weight_filler_;
+}
+inline ::caffe::FillerParameter* WeightPlusParameter::release_weight_filler() {
+  clear_has_weight_filler();
+  ::caffe::FillerParameter* temp = weight_filler_;
+  weight_filler_ = NULL;
+  return temp;
+}
+inline void WeightPlusParameter::set_allocated_weight_filler(::caffe::FillerParameter* weight_filler) {
+  delete weight_filler_;
+  weight_filler_ = weight_filler;
+  if (weight_filler) {
+    set_has_weight_filler();
+  } else {
+    clear_has_weight_filler();
+  }
+  // @@protoc_insertion_point(field_set_allocated:caffe.WeightPlusParameter.weight_filler)
+}
+
+// -------------------------------------------------------------------
+
 // SoftmaxParameter
 
 // optional .caffe.SoftmaxParameter.Engine engine = 1 [default = DEFAULT];
@@ -24767,15 +25204,97 @@ inline void V1LayerParameter::set_allocated_orthogonal_constraint_loss_loss_para
   // @@protoc_insertion_point(field_set_allocated:caffe.V1LayerParameter.orthogonal_constraint_loss_loss_param)
 }
 
-// optional .caffe.V0LayerParameter layer = 1;
-inline bool V1LayerParameter::has_layer() const {
+// optional .caffe.ResidualQuantizationParameter residual_quantization_param = 49;
+inline bool V1LayerParameter::has_residual_quantization_param() const {
   return (_has_bits_[1] & 0x00010000u) != 0;
 }
-inline void V1LayerParameter::set_has_layer() {
+inline void V1LayerParameter::set_has_residual_quantization_param() {
   _has_bits_[1] |= 0x00010000u;
 }
-inline void V1LayerParameter::clear_has_layer() {
+inline void V1LayerParameter::clear_has_residual_quantization_param() {
   _has_bits_[1] &= ~0x00010000u;
+}
+inline void V1LayerParameter::clear_residual_quantization_param() {
+  if (residual_quantization_param_ != NULL) residual_quantization_param_->::caffe::ResidualQuantizationParameter::Clear();
+  clear_has_residual_quantization_param();
+}
+inline const ::caffe::ResidualQuantizationParameter& V1LayerParameter::residual_quantization_param() const {
+  // @@protoc_insertion_point(field_get:caffe.V1LayerParameter.residual_quantization_param)
+  return residual_quantization_param_ != NULL ? *residual_quantization_param_ : *default_instance_->residual_quantization_param_;
+}
+inline ::caffe::ResidualQuantizationParameter* V1LayerParameter::mutable_residual_quantization_param() {
+  set_has_residual_quantization_param();
+  if (residual_quantization_param_ == NULL) residual_quantization_param_ = new ::caffe::ResidualQuantizationParameter;
+  // @@protoc_insertion_point(field_mutable:caffe.V1LayerParameter.residual_quantization_param)
+  return residual_quantization_param_;
+}
+inline ::caffe::ResidualQuantizationParameter* V1LayerParameter::release_residual_quantization_param() {
+  clear_has_residual_quantization_param();
+  ::caffe::ResidualQuantizationParameter* temp = residual_quantization_param_;
+  residual_quantization_param_ = NULL;
+  return temp;
+}
+inline void V1LayerParameter::set_allocated_residual_quantization_param(::caffe::ResidualQuantizationParameter* residual_quantization_param) {
+  delete residual_quantization_param_;
+  residual_quantization_param_ = residual_quantization_param;
+  if (residual_quantization_param) {
+    set_has_residual_quantization_param();
+  } else {
+    clear_has_residual_quantization_param();
+  }
+  // @@protoc_insertion_point(field_set_allocated:caffe.V1LayerParameter.residual_quantization_param)
+}
+
+// optional .caffe.WeightPlusParameter weight_plus_param = 50;
+inline bool V1LayerParameter::has_weight_plus_param() const {
+  return (_has_bits_[1] & 0x00020000u) != 0;
+}
+inline void V1LayerParameter::set_has_weight_plus_param() {
+  _has_bits_[1] |= 0x00020000u;
+}
+inline void V1LayerParameter::clear_has_weight_plus_param() {
+  _has_bits_[1] &= ~0x00020000u;
+}
+inline void V1LayerParameter::clear_weight_plus_param() {
+  if (weight_plus_param_ != NULL) weight_plus_param_->::caffe::WeightPlusParameter::Clear();
+  clear_has_weight_plus_param();
+}
+inline const ::caffe::WeightPlusParameter& V1LayerParameter::weight_plus_param() const {
+  // @@protoc_insertion_point(field_get:caffe.V1LayerParameter.weight_plus_param)
+  return weight_plus_param_ != NULL ? *weight_plus_param_ : *default_instance_->weight_plus_param_;
+}
+inline ::caffe::WeightPlusParameter* V1LayerParameter::mutable_weight_plus_param() {
+  set_has_weight_plus_param();
+  if (weight_plus_param_ == NULL) weight_plus_param_ = new ::caffe::WeightPlusParameter;
+  // @@protoc_insertion_point(field_mutable:caffe.V1LayerParameter.weight_plus_param)
+  return weight_plus_param_;
+}
+inline ::caffe::WeightPlusParameter* V1LayerParameter::release_weight_plus_param() {
+  clear_has_weight_plus_param();
+  ::caffe::WeightPlusParameter* temp = weight_plus_param_;
+  weight_plus_param_ = NULL;
+  return temp;
+}
+inline void V1LayerParameter::set_allocated_weight_plus_param(::caffe::WeightPlusParameter* weight_plus_param) {
+  delete weight_plus_param_;
+  weight_plus_param_ = weight_plus_param;
+  if (weight_plus_param) {
+    set_has_weight_plus_param();
+  } else {
+    clear_has_weight_plus_param();
+  }
+  // @@protoc_insertion_point(field_set_allocated:caffe.V1LayerParameter.weight_plus_param)
+}
+
+// optional .caffe.V0LayerParameter layer = 1;
+inline bool V1LayerParameter::has_layer() const {
+  return (_has_bits_[1] & 0x00040000u) != 0;
+}
+inline void V1LayerParameter::set_has_layer() {
+  _has_bits_[1] |= 0x00040000u;
+}
+inline void V1LayerParameter::clear_has_layer() {
+  _has_bits_[1] &= ~0x00040000u;
 }
 inline void V1LayerParameter::clear_layer() {
   if (layer_ != NULL) layer_->::caffe::V0LayerParameter::Clear();

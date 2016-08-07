@@ -410,6 +410,8 @@ message LayerParameter {
   optional VideoTemporalPoolingParameter video_temporal_pooling_param = 154;
   optional BalanceConstraintLossParameter balance_constraint_loss_param = 155;
   optional OrthogonalConstraintLossParameter orthogonal_constraint_loss_loss_param = 156;
+  optional ResidualQuantizationParameter residual_quantization_param = 157;
+  optional WeightPlusParameter weight_plus_param = 158;
 }
 
 // Message that stores parameters used to apply transformation
@@ -1171,6 +1173,22 @@ message OrthogonalConstraintLossParameter{
  optional float alpha = 2 [default = 1];
 }
 
+// Message that stores paramters used by ResidualQuantizationLayer
+message ResidualQuantizationParameter{
+  // lamda for default
+  optional float lamda = 1 [default = 1];
+}
+
+// Message that stores parameters used by WeightPlusLayer
+message WeightPlusParameter{
+  // dim for plus weight
+  optional int32 dim = 1 [default = 12];
+  // output weight
+  optional bool output_flag = 2 [default = false];
+  // The filler for the weight
+  optional FillerParameter weight_filler = 3;
+}
+
 // Message that stores parameters used by SoftmaxLayer, SoftmaxWithLossLayer
 message SoftmaxParameter {
   enum Engine {
@@ -1317,6 +1335,8 @@ message V1LayerParameter {
 	VIDEO_TEMPORAL_POOLING=43;
 	BALANCE_CONSTRAINT_LOSS=44;
 	ORTHOGONAL_CONSTRAINT_LOSS=45;
+	RESIDUAL_QUANTIZATION = 46;
+	WEIGHT_PLUS = 47;
     WINDOW_DATA = 24;
   }
   optional LayerType type = 5;
@@ -1360,12 +1380,16 @@ message V1LayerParameter {
   optional WindowDataParameter window_data_param = 20;
   optional TransformationParameter transform_param = 36;
   optional LossParameter loss_param = 42;
+  
   optional TripletRankingHingeLossParameter triplet_ranking_hinge_loss_param = 43;
   optional PairWiseClipHingeLossParameter pairwise_clip_hinge_loss_param = 44;
   optional TripletClipHingeLossParameter triplet_clip_hinge_loss_param = 45;
   optional VideoTemporalPoolingParameter video_temporal_pooling_param=46;
   optional BalanceConstraintLossParameter balance_constraint_loss_param=47;
   optional OrthogonalConstraintLossParameter orthogonal_constraint_loss_loss_param=48;
+  optional ResidualQuantizationParameter residual_quantization_param = 49;
+  optional WeightPlusParameter weight_plus_param = 50;
+  
   optional V0LayerParameter layer = 1;
 }
 
