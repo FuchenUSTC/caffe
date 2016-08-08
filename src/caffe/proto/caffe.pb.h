@@ -93,6 +93,7 @@ class BalanceConstraintLossParameter;
 class OrthogonalConstraintLossParameter;
 class ResidualQuantizationParameter;
 class WeightPlusParameter;
+class CoshQuantizationLossParameter;
 class SoftmaxParameter;
 class TanHParameter;
 class TileParameter;
@@ -571,11 +572,12 @@ enum V1LayerParameter_LayerType {
   V1LayerParameter_LayerType_ORTHOGONAL_CONSTRAINT_LOSS = 45,
   V1LayerParameter_LayerType_RESIDUAL_QUANTIZATION = 46,
   V1LayerParameter_LayerType_WEIGHT_PLUS = 47,
+  V1LayerParameter_LayerType_COSH_QUANTIZATION_LOSS = 48,
   V1LayerParameter_LayerType_WINDOW_DATA = 24
 };
 bool V1LayerParameter_LayerType_IsValid(int value);
 const V1LayerParameter_LayerType V1LayerParameter_LayerType_LayerType_MIN = V1LayerParameter_LayerType_NONE;
-const V1LayerParameter_LayerType V1LayerParameter_LayerType_LayerType_MAX = V1LayerParameter_LayerType_WEIGHT_PLUS;
+const V1LayerParameter_LayerType V1LayerParameter_LayerType_LayerType_MAX = V1LayerParameter_LayerType_COSH_QUANTIZATION_LOSS;
 const int V1LayerParameter_LayerType_LayerType_ARRAYSIZE = V1LayerParameter_LayerType_LayerType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* V1LayerParameter_LayerType_descriptor();
@@ -3281,6 +3283,15 @@ class LayerParameter : public ::google::protobuf::Message {
   inline ::caffe::WeightPlusParameter* release_weight_plus_param();
   inline void set_allocated_weight_plus_param(::caffe::WeightPlusParameter* weight_plus_param);
 
+  // optional .caffe.CoshQuantizationLossParameter cosh_quantization_loss_param = 159;
+  inline bool has_cosh_quantization_loss_param() const;
+  inline void clear_cosh_quantization_loss_param();
+  static const int kCoshQuantizationLossParamFieldNumber = 159;
+  inline const ::caffe::CoshQuantizationLossParameter& cosh_quantization_loss_param() const;
+  inline ::caffe::CoshQuantizationLossParameter* mutable_cosh_quantization_loss_param();
+  inline ::caffe::CoshQuantizationLossParameter* release_cosh_quantization_loss_param();
+  inline void set_allocated_cosh_quantization_loss_param(::caffe::CoshQuantizationLossParameter* cosh_quantization_loss_param);
+
   // @@protoc_insertion_point(class_scope:caffe.LayerParameter)
  private:
   inline void set_has_name();
@@ -3399,6 +3410,8 @@ class LayerParameter : public ::google::protobuf::Message {
   inline void clear_has_residual_quantization_param();
   inline void set_has_weight_plus_param();
   inline void clear_has_weight_plus_param();
+  inline void set_has_cosh_quantization_loss_param();
+  inline void clear_has_cosh_quantization_loss_param();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -3469,6 +3482,7 @@ class LayerParameter : public ::google::protobuf::Message {
   ::caffe::OrthogonalConstraintLossParameter* orthogonal_constraint_loss_loss_param_;
   ::caffe::ResidualQuantizationParameter* residual_quantization_param_;
   ::caffe::WeightPlusParameter* weight_plus_param_;
+  ::caffe::CoshQuantizationLossParameter* cosh_quantization_loss_param_;
   int phase_;
   friend void  protobuf_AddDesc_caffe_2eproto();
   friend void protobuf_AssignDesc_caffe_2eproto();
@@ -8934,6 +8948,95 @@ class WeightPlusParameter : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class CoshQuantizationLossParameter : public ::google::protobuf::Message {
+ public:
+  CoshQuantizationLossParameter();
+  virtual ~CoshQuantizationLossParameter();
+
+  CoshQuantizationLossParameter(const CoshQuantizationLossParameter& from);
+
+  inline CoshQuantizationLossParameter& operator=(const CoshQuantizationLossParameter& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const CoshQuantizationLossParameter& default_instance();
+
+  void Swap(CoshQuantizationLossParameter* other);
+
+  // implements Message ----------------------------------------------
+
+  CoshQuantizationLossParameter* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const CoshQuantizationLossParameter& from);
+  void MergeFrom(const CoshQuantizationLossParameter& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional float lamda = 1 [default = 1];
+  inline bool has_lamda() const;
+  inline void clear_lamda();
+  static const int kLamdaFieldNumber = 1;
+  inline float lamda() const;
+  inline void set_lamda(float value);
+
+  // optional int32 dim = 2 [default = 12];
+  inline bool has_dim() const;
+  inline void clear_dim();
+  static const int kDimFieldNumber = 2;
+  inline ::google::protobuf::int32 dim() const;
+  inline void set_dim(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:caffe.CoshQuantizationLossParameter)
+ private:
+  inline void set_has_lamda();
+  inline void clear_has_lamda();
+  inline void set_has_dim();
+  inline void clear_has_dim();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  float lamda_;
+  ::google::protobuf::int32 dim_;
+  friend void  protobuf_AddDesc_caffe_2eproto();
+  friend void protobuf_AssignDesc_caffe_2eproto();
+  friend void protobuf_ShutdownFile_caffe_2eproto();
+
+  void InitAsDefaultInstance();
+  static CoshQuantizationLossParameter* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class SoftmaxParameter : public ::google::protobuf::Message {
  public:
   SoftmaxParameter();
@@ -9867,6 +9970,7 @@ class V1LayerParameter : public ::google::protobuf::Message {
   static const LayerType ORTHOGONAL_CONSTRAINT_LOSS = V1LayerParameter_LayerType_ORTHOGONAL_CONSTRAINT_LOSS;
   static const LayerType RESIDUAL_QUANTIZATION = V1LayerParameter_LayerType_RESIDUAL_QUANTIZATION;
   static const LayerType WEIGHT_PLUS = V1LayerParameter_LayerType_WEIGHT_PLUS;
+  static const LayerType COSH_QUANTIZATION_LOSS = V1LayerParameter_LayerType_COSH_QUANTIZATION_LOSS;
   static const LayerType WINDOW_DATA = V1LayerParameter_LayerType_WINDOW_DATA;
   static inline bool LayerType_IsValid(int value) {
     return V1LayerParameter_LayerType_IsValid(value);
@@ -10406,6 +10510,15 @@ class V1LayerParameter : public ::google::protobuf::Message {
   inline ::caffe::WeightPlusParameter* release_weight_plus_param();
   inline void set_allocated_weight_plus_param(::caffe::WeightPlusParameter* weight_plus_param);
 
+  // optional .caffe.CoshQuantizationLossParameter cosh_quantization_loss_param = 51;
+  inline bool has_cosh_quantization_loss_param() const;
+  inline void clear_cosh_quantization_loss_param();
+  static const int kCoshQuantizationLossParamFieldNumber = 51;
+  inline const ::caffe::CoshQuantizationLossParameter& cosh_quantization_loss_param() const;
+  inline ::caffe::CoshQuantizationLossParameter* mutable_cosh_quantization_loss_param();
+  inline ::caffe::CoshQuantizationLossParameter* release_cosh_quantization_loss_param();
+  inline void set_allocated_cosh_quantization_loss_param(::caffe::CoshQuantizationLossParameter* cosh_quantization_loss_param);
+
   // optional .caffe.V0LayerParameter layer = 1;
   inline bool has_layer() const;
   inline void clear_layer();
@@ -10497,6 +10610,8 @@ class V1LayerParameter : public ::google::protobuf::Message {
   inline void clear_has_residual_quantization_param();
   inline void set_has_weight_plus_param();
   inline void clear_has_weight_plus_param();
+  inline void set_has_cosh_quantization_loss_param();
+  inline void clear_has_cosh_quantization_loss_param();
   inline void set_has_layer();
   inline void clear_has_layer();
 
@@ -10552,6 +10667,7 @@ class V1LayerParameter : public ::google::protobuf::Message {
   ::caffe::OrthogonalConstraintLossParameter* orthogonal_constraint_loss_loss_param_;
   ::caffe::ResidualQuantizationParameter* residual_quantization_param_;
   ::caffe::WeightPlusParameter* weight_plus_param_;
+  ::caffe::CoshQuantizationLossParameter* cosh_quantization_loss_param_;
   ::caffe::V0LayerParameter* layer_;
   int type_;
   mutable int _cached_size_;
@@ -17033,6 +17149,47 @@ inline void LayerParameter::set_allocated_weight_plus_param(::caffe::WeightPlusP
   // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.weight_plus_param)
 }
 
+// optional .caffe.CoshQuantizationLossParameter cosh_quantization_loss_param = 159;
+inline bool LayerParameter::has_cosh_quantization_loss_param() const {
+  return (_has_bits_[2] & 0x00000004u) != 0;
+}
+inline void LayerParameter::set_has_cosh_quantization_loss_param() {
+  _has_bits_[2] |= 0x00000004u;
+}
+inline void LayerParameter::clear_has_cosh_quantization_loss_param() {
+  _has_bits_[2] &= ~0x00000004u;
+}
+inline void LayerParameter::clear_cosh_quantization_loss_param() {
+  if (cosh_quantization_loss_param_ != NULL) cosh_quantization_loss_param_->::caffe::CoshQuantizationLossParameter::Clear();
+  clear_has_cosh_quantization_loss_param();
+}
+inline const ::caffe::CoshQuantizationLossParameter& LayerParameter::cosh_quantization_loss_param() const {
+  // @@protoc_insertion_point(field_get:caffe.LayerParameter.cosh_quantization_loss_param)
+  return cosh_quantization_loss_param_ != NULL ? *cosh_quantization_loss_param_ : *default_instance_->cosh_quantization_loss_param_;
+}
+inline ::caffe::CoshQuantizationLossParameter* LayerParameter::mutable_cosh_quantization_loss_param() {
+  set_has_cosh_quantization_loss_param();
+  if (cosh_quantization_loss_param_ == NULL) cosh_quantization_loss_param_ = new ::caffe::CoshQuantizationLossParameter;
+  // @@protoc_insertion_point(field_mutable:caffe.LayerParameter.cosh_quantization_loss_param)
+  return cosh_quantization_loss_param_;
+}
+inline ::caffe::CoshQuantizationLossParameter* LayerParameter::release_cosh_quantization_loss_param() {
+  clear_has_cosh_quantization_loss_param();
+  ::caffe::CoshQuantizationLossParameter* temp = cosh_quantization_loss_param_;
+  cosh_quantization_loss_param_ = NULL;
+  return temp;
+}
+inline void LayerParameter::set_allocated_cosh_quantization_loss_param(::caffe::CoshQuantizationLossParameter* cosh_quantization_loss_param) {
+  delete cosh_quantization_loss_param_;
+  cosh_quantization_loss_param_ = cosh_quantization_loss_param;
+  if (cosh_quantization_loss_param) {
+    set_has_cosh_quantization_loss_param();
+  } else {
+    clear_has_cosh_quantization_loss_param();
+  }
+  // @@protoc_insertion_point(field_set_allocated:caffe.LayerParameter.cosh_quantization_loss_param)
+}
+
 // -------------------------------------------------------------------
 
 // TransformationParameter
@@ -22459,6 +22616,58 @@ inline void WeightPlusParameter::set_allocated_weight_filler(::caffe::FillerPara
 
 // -------------------------------------------------------------------
 
+// CoshQuantizationLossParameter
+
+// optional float lamda = 1 [default = 1];
+inline bool CoshQuantizationLossParameter::has_lamda() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void CoshQuantizationLossParameter::set_has_lamda() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void CoshQuantizationLossParameter::clear_has_lamda() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void CoshQuantizationLossParameter::clear_lamda() {
+  lamda_ = 1;
+  clear_has_lamda();
+}
+inline float CoshQuantizationLossParameter::lamda() const {
+  // @@protoc_insertion_point(field_get:caffe.CoshQuantizationLossParameter.lamda)
+  return lamda_;
+}
+inline void CoshQuantizationLossParameter::set_lamda(float value) {
+  set_has_lamda();
+  lamda_ = value;
+  // @@protoc_insertion_point(field_set:caffe.CoshQuantizationLossParameter.lamda)
+}
+
+// optional int32 dim = 2 [default = 12];
+inline bool CoshQuantizationLossParameter::has_dim() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void CoshQuantizationLossParameter::set_has_dim() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void CoshQuantizationLossParameter::clear_has_dim() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void CoshQuantizationLossParameter::clear_dim() {
+  dim_ = 12;
+  clear_has_dim();
+}
+inline ::google::protobuf::int32 CoshQuantizationLossParameter::dim() const {
+  // @@protoc_insertion_point(field_get:caffe.CoshQuantizationLossParameter.dim)
+  return dim_;
+}
+inline void CoshQuantizationLossParameter::set_dim(::google::protobuf::int32 value) {
+  set_has_dim();
+  dim_ = value;
+  // @@protoc_insertion_point(field_set:caffe.CoshQuantizationLossParameter.dim)
+}
+
+// -------------------------------------------------------------------
+
 // SoftmaxParameter
 
 // optional .caffe.SoftmaxParameter.Engine engine = 1 [default = DEFAULT];
@@ -25286,15 +25495,56 @@ inline void V1LayerParameter::set_allocated_weight_plus_param(::caffe::WeightPlu
   // @@protoc_insertion_point(field_set_allocated:caffe.V1LayerParameter.weight_plus_param)
 }
 
-// optional .caffe.V0LayerParameter layer = 1;
-inline bool V1LayerParameter::has_layer() const {
+// optional .caffe.CoshQuantizationLossParameter cosh_quantization_loss_param = 51;
+inline bool V1LayerParameter::has_cosh_quantization_loss_param() const {
   return (_has_bits_[1] & 0x00040000u) != 0;
 }
-inline void V1LayerParameter::set_has_layer() {
+inline void V1LayerParameter::set_has_cosh_quantization_loss_param() {
   _has_bits_[1] |= 0x00040000u;
 }
-inline void V1LayerParameter::clear_has_layer() {
+inline void V1LayerParameter::clear_has_cosh_quantization_loss_param() {
   _has_bits_[1] &= ~0x00040000u;
+}
+inline void V1LayerParameter::clear_cosh_quantization_loss_param() {
+  if (cosh_quantization_loss_param_ != NULL) cosh_quantization_loss_param_->::caffe::CoshQuantizationLossParameter::Clear();
+  clear_has_cosh_quantization_loss_param();
+}
+inline const ::caffe::CoshQuantizationLossParameter& V1LayerParameter::cosh_quantization_loss_param() const {
+  // @@protoc_insertion_point(field_get:caffe.V1LayerParameter.cosh_quantization_loss_param)
+  return cosh_quantization_loss_param_ != NULL ? *cosh_quantization_loss_param_ : *default_instance_->cosh_quantization_loss_param_;
+}
+inline ::caffe::CoshQuantizationLossParameter* V1LayerParameter::mutable_cosh_quantization_loss_param() {
+  set_has_cosh_quantization_loss_param();
+  if (cosh_quantization_loss_param_ == NULL) cosh_quantization_loss_param_ = new ::caffe::CoshQuantizationLossParameter;
+  // @@protoc_insertion_point(field_mutable:caffe.V1LayerParameter.cosh_quantization_loss_param)
+  return cosh_quantization_loss_param_;
+}
+inline ::caffe::CoshQuantizationLossParameter* V1LayerParameter::release_cosh_quantization_loss_param() {
+  clear_has_cosh_quantization_loss_param();
+  ::caffe::CoshQuantizationLossParameter* temp = cosh_quantization_loss_param_;
+  cosh_quantization_loss_param_ = NULL;
+  return temp;
+}
+inline void V1LayerParameter::set_allocated_cosh_quantization_loss_param(::caffe::CoshQuantizationLossParameter* cosh_quantization_loss_param) {
+  delete cosh_quantization_loss_param_;
+  cosh_quantization_loss_param_ = cosh_quantization_loss_param;
+  if (cosh_quantization_loss_param) {
+    set_has_cosh_quantization_loss_param();
+  } else {
+    clear_has_cosh_quantization_loss_param();
+  }
+  // @@protoc_insertion_point(field_set_allocated:caffe.V1LayerParameter.cosh_quantization_loss_param)
+}
+
+// optional .caffe.V0LayerParameter layer = 1;
+inline bool V1LayerParameter::has_layer() const {
+  return (_has_bits_[1] & 0x00080000u) != 0;
+}
+inline void V1LayerParameter::set_has_layer() {
+  _has_bits_[1] |= 0x00080000u;
+}
+inline void V1LayerParameter::clear_has_layer() {
+  _has_bits_[1] &= ~0x00080000u;
 }
 inline void V1LayerParameter::clear_layer() {
   if (layer_ != NULL) layer_->::caffe::V0LayerParameter::Clear();

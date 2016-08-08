@@ -97,9 +97,9 @@ int main(int argc, char** argv) {
 		lines3.push_back(filename3); //different image
 		i++;
 		if (i % 1000 == 0)
-			std::cout << "have load " << i << " triplet lines.\n";
+			LOG(INFO) << "have load " << i << " triplet lines.\n";
 	}
-	std::cout << "Start to make triplet DB." << std::endl;
+	LOG(INFO) << "Start to make triplet DB." << std::endl;
 	LOG(INFO) << "A total of " << lines1.size() << " images.";
 	if (encode_type.size() && !encoded)
 		LOG(INFO) << "encode_type specified, assuming encoded=true.";

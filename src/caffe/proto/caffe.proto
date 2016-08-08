@@ -412,6 +412,7 @@ message LayerParameter {
   optional OrthogonalConstraintLossParameter orthogonal_constraint_loss_loss_param = 156;
   optional ResidualQuantizationParameter residual_quantization_param = 157;
   optional WeightPlusParameter weight_plus_param = 158;
+  optional CoshQuantizationLossParameter cosh_quantization_loss_param = 159;
 }
 
 // Message that stores parameters used to apply transformation
@@ -1189,6 +1190,14 @@ message WeightPlusParameter{
   optional FillerParameter weight_filler = 3;
 }
 
+// Message that stores parameters used by CoshQuantizationLoss
+message CoshQuantizationLossParameter{
+  // lamda for default 
+  optional float lamda = 1 [default = 1];
+  // dim 
+  optional int32 dim = 2 [default = 12];
+}
+
 // Message that stores parameters used by SoftmaxLayer, SoftmaxWithLossLayer
 message SoftmaxParameter {
   enum Engine {
@@ -1337,6 +1346,7 @@ message V1LayerParameter {
 	ORTHOGONAL_CONSTRAINT_LOSS=45;
 	RESIDUAL_QUANTIZATION = 46;
 	WEIGHT_PLUS = 47;
+	COSH_QUANTIZATION_LOSS = 48;
     WINDOW_DATA = 24;
   }
   optional LayerType type = 5;
@@ -1389,6 +1399,7 @@ message V1LayerParameter {
   optional OrthogonalConstraintLossParameter orthogonal_constraint_loss_loss_param=48;
   optional ResidualQuantizationParameter residual_quantization_param = 49;
   optional WeightPlusParameter weight_plus_param = 50;
+  optional CoshQuantizationLossParameter cosh_quantization_loss_param = 51;
   
   optional V0LayerParameter layer = 1;
 }

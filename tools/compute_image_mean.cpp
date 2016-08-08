@@ -29,6 +29,13 @@ int main(int argc, char** argv) {
   namespace gflags = google;
 #endif
 
+  //// Just for test
+  //argc = 3;
+  //argv[1] = "D:\\users\\v-fulong\\Data\\CIFAR\\LMDB\\cifar_triplet_val_lmdb";
+  //argv[2] = "D:\\users\\v-fulong\\Data\\CIFAR\\LMDB\\cifar_mean_test.bin";
+  //FLAGS_backend = "lmdb";
+  ////
+
   gflags::SetUsageMessage("Compute the mean_image of a set of images given by"
         " a leveldb/lmdb\n"
         "Usage:\n"
