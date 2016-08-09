@@ -19,6 +19,17 @@ void CoshQuantizationLossLayer<Dtype>::LayerSetUp(
 }
 
 template <typename Dtype>
+void CoshQuantizationLossLayer<Dtype>::Reshape(
+	const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top){
+
+	CHECK_EQ(bottom[0]->channels(), dim_)
+		<< "CoshQuantizationLossLayer: code length must match.";
+	vector<int> loss_shape(0);  // Loss layers output a scalar; 0 axes.
+	top[0]->Reshape(loss_shape);
+}
+
+
+template <typename Dtype>
 void CoshQuantizationLossLayer<Dtype>::Forward_cpu(
 	const vector<Blob<Dtype>*>& bottom,
 	const vector<Blob<Dtype>*>& top){
@@ -28,7 +39,7 @@ void CoshQuantizationLossLayer<Dtype>::Forward_cpu(
 		for (int c = 0; c < dim_; ++c){
 			int offset = n*dim_ + c;
 			cosh_quantization_loss +=
-				log(cosh(abs(bottom_data[offset])) - 1);
+				log(cosh(abs(bottom_data[offset]) - 1));
 		}
 	}
 	top[0]->mutable_cpu_data()[0] = cosh_quantization_loss / batch_;
@@ -44,8 +55,8 @@ void CoshQuantizationLossLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& 
 		for (int n = 0; n < batch_; ++n){
 			for (int c = 0; c < dim_; ++c){
 				int offset = n*dim_ + c;
-				bottom_diff[offset] = tanh(abs(bottom_data[offset]) - 1)*
-					(bottom_data[offset]>0 ? Dtype(1.0) : Dtype(-1.0));
+				bottom_diff[offset] = Dtype(2.0)*(tanh(abs(bottom_data[offset]) - 1)*
+					(bottom_data[offset]>0 ? Dtype(1.0) : Dtype(-1.0))) / batch_;
 			}
 		}
 	}

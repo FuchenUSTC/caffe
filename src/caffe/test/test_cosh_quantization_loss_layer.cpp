@@ -23,12 +23,12 @@ class CoshQuantizationLossLayerTest : public MultiDeviceTest<TypeParam>{
 
 protected:
 	CoshQuantizationLossLayerTest()
-		:blob_bottom_data_(new Blob<Dtype>(12, 24, 1, 1)),
+		:blob_bottom_data_(new Blob<Dtype>(32, 24, 1, 1)),
 		blob_top_loss_(new Blob<Dtype>()){
 		Dtype* bottom_code = blob_bottom_data_->mutable_cpu_data();
 		std::srand(time(NULL));
-		for (int i = 0; i < 12 * 24; ++i) {
-			bottom_code[i] = (std::rand() % 100000)*0.00001;
+		for (int i = 0; i < 32 * 24; ++i) {
+			bottom_code[i] = (std::rand() % 1000)*0.001;
 		}
 		blob_bottom_vec_.push_back(blob_bottom_data_);
 		blob_top_vec_.push_back(blob_top_loss_);
@@ -83,7 +83,7 @@ TYPED_TEST(CoshQuantizationLossLayerTest, TestGradient){
 
 	CoshQuantizationLossLayer<Dtype> layer(layer_param);
 	layer.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
-	GradientChecker<Dtype> checker(1e-2, 1e-2, 1701);
+	GradientChecker<Dtype> checker(1e-3, 1e-2, 1701);
 	checker.CheckGradientExhaustive(&layer, this->blob_bottom_vec_,
 		this->blob_top_vec_);
 }
