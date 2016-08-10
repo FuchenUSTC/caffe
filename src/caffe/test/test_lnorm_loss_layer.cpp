@@ -8,21 +8,21 @@
 #include "caffe/blob.hpp"
 #include "caffe/common.hpp"
 #include "caffe/filler.hpp"
-#include "caffe/layers/cosh_quantization_loss_layer.hpp"
+#include "caffe/layers/lnorm_loss_layer.hpp"
 
 #include "caffe/test/test_caffe_main.hpp"
 #include "caffe/test/test_gradient_check_util.hpp"
 
-// Added by Fuchen Long in 8/9/2016
-// to test the cosh_quantization_loss
+// Added by Fuchen Long in 8/10/2016
+// to test the lnorm2 loss layer
 
 namespace caffe{
 
 template <typename TypeParam>
-class CoshQuantizationLossLayerTest : public MultiDeviceTest<TypeParam>{
+class LnormLossLayerTest : public MultiDeviceTest<TypeParam>{
 
 protected:
-	CoshQuantizationLossLayerTest()
+	LnormLossLayerTest()
 		:blob_bottom_data_(new Blob<Dtype>(32, 24, 1, 1)),
 		blob_top_loss_(new Blob<Dtype>()){
 		Dtype* bottom_code = blob_bottom_data_->mutable_cpu_data();
@@ -34,25 +34,21 @@ protected:
 		blob_top_vec_.push_back(blob_top_loss_);
 	}
 
-	virtual ~CoshQuantizationLossLayerTest(){
+	virtual ~LnormLossLayerTest(){
 		delete blob_bottom_data_;
 		delete blob_top_loss_;
 	}
 
 	void TestForward(){
 		LayerParameter layer_param;
-		CoshQuantizationLossParameter* cosh_param = layer_param.mutable_cosh_quantization_loss_param();
-		cosh_param->set_dim(24);
-		cosh_param->set_sigmoid_flag(true);
-
-		CoshQuantizationLossLayer<Dtype> layer_weight_1(layer_param);
+		LnormLossLayer<Dtype> layer_weight_1(layer_param);
 		layer_weight_1.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
 		const Dtype loss_weight_1 =
 			layer_weight_1.Forward(this->blob_bottom_vec_, this->blob_top_vec_);
 
 		const Dtype kLossWeight = 7.7;
 		layer_param.add_loss_weight(kLossWeight);
-		CoshQuantizationLossLayer<Dtype> layer_weight_2(layer_param);
+		LnormLossLayer<Dtype> layer_weight_2(layer_param);
 		layer_weight_2.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
 		const Dtype loss_weight_2 =
 			layer_weight_2.Forward(this->blob_bottom_vec_, this->blob_top_vec_);
@@ -68,26 +64,22 @@ protected:
 	vector<Blob<Dtype>*> blob_top_vec_;
 };
 
-TYPED_TEST_CASE(CoshQuantizationLossLayerTest, TestDtypesAndDevices);
+TYPED_TEST_CASE(LnormLossLayerTest, TestDtypesAndDevices);
 
-TYPED_TEST(CoshQuantizationLossLayerTest, TestForward){
+TYPED_TEST(LnormLossLayerTest, TestForward){
 	this->TestForward();
 }
 
-TYPED_TEST(CoshQuantizationLossLayerTest, TestGradient){
+TYPED_TEST(LnormLossLayerTest, TestGradient){
 	typedef typename TypeParam::Dtype Dtype;
 	LayerParameter layer_param;
 	const Dtype kLossWeight = 3.7;
 	layer_param.add_loss_weight(kLossWeight);
-	CoshQuantizationLossParameter* cosh_param = layer_param.mutable_cosh_quantization_loss_param();
-	cosh_param->set_dim(24);
-	cosh_param->set_sigmoid_flag(true);
 
-	CoshQuantizationLossLayer<Dtype> layer(layer_param);
+	LnormLossLayer<Dtype> layer(layer_param);
 	layer.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
 	GradientChecker<Dtype> checker(1e-3, 1e-2, 1701);
 	checker.CheckGradientExhaustive(&layer, this->blob_bottom_vec_,
 		this->blob_top_vec_);
 }
-
 }// namespace caffe

@@ -13,6 +13,7 @@ void CoshQuantizationLossLayer<Dtype>::LayerSetUp(
 	const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top){
 	LossLayer<Dtype>::LayerSetUp(bottom, top);
 	dim_ = this->layer_param_.cosh_quantization_loss_param().dim();
+	sigmoid_flag_ = this->layer_param_.cosh_quantization_loss_param().sigmoid_flag();
 	batch_ = bottom[0]->num();
 	CHECK_EQ(bottom[0]->channels(), dim_)
 		<< "CoshQuantizationLossLayer: code length must match.";
@@ -38,8 +39,13 @@ void CoshQuantizationLossLayer<Dtype>::Forward_cpu(
 	for (int n = 0; n < batch_; ++n){
 		for (int c = 0; c < dim_; ++c){
 			int offset = n*dim_ + c;
-			cosh_quantization_loss +=
+			if (!sigmoid_flag_)
+				//For the tanh quantizaton
+				cosh_quantization_loss +=
 				log(cosh(abs(bottom_data[offset]) - 1));
+			else // For the sigmoid quantization
+				cosh_quantization_loss +=
+				log(cosh(abs(Dtype(2.0)*bottom_data[offset] - Dtype(1.0)) - 1));
 		}
 	}
 	top[0]->mutable_cpu_data()[0] = cosh_quantization_loss / batch_;
@@ -55,8 +61,13 @@ void CoshQuantizationLossLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& 
 		for (int n = 0; n < batch_; ++n){
 			for (int c = 0; c < dim_; ++c){
 				int offset = n*dim_ + c;
-				bottom_diff[offset] = Dtype(2.0)*(tanh(abs(bottom_data[offset]) - 1)*
+				if (!sigmoid_flag_)
+					// For the tanh quantization
+					bottom_diff[offset] = Dtype(2.0)*(tanh(abs(bottom_data[offset]) - 1)*
 					(bottom_data[offset]>0 ? Dtype(1.0) : Dtype(-1.0))) / batch_;
+				else // For the sigmoid quantization
+					bottom_diff[offset] = Dtype(4.0)*(tanh(abs(Dtype(2.0)*bottom_data[offset] - Dtype(1.0)) - 1)*
+					(Dtype(2.0)*bottom_data[offset] - Dtype(1.0)>0 ? Dtype(1.0) : Dtype(-1.0))) / batch_;
 			}
 		}
 	}

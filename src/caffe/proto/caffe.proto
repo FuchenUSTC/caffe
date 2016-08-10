@@ -413,6 +413,7 @@ message LayerParameter {
   optional ResidualQuantizationParameter residual_quantization_param = 157;
   optional WeightPlusParameter weight_plus_param = 158;
   optional CoshQuantizationLossParameter cosh_quantization_loss_param = 159;
+  optional LnormLossParameter lnorm_loss_param = 160;
 }
 
 // Message that stores parameters used to apply transformation
@@ -1196,6 +1197,14 @@ message CoshQuantizationLossParameter{
   optional float lamda = 1 [default = 1];
   // dim 
   optional int32 dim = 2 [default = 12];
+  // sigmoid or tanh quantization
+  optional bool sigmoid_flag = 3 [default = true];
+}
+
+// Message that sotres parameter used by LnormLossLayer
+message LnormLossParameter{
+  // dim
+  optional int32 dim = 1 [default = 12];
 }
 
 // Message that stores parameters used by SoftmaxLayer, SoftmaxWithLossLayer
@@ -1347,6 +1356,7 @@ message V1LayerParameter {
 	RESIDUAL_QUANTIZATION = 46;
 	WEIGHT_PLUS = 47;
 	COSH_QUANTIZATION_LOSS = 48;
+	LNORM_LOSS = 49;
     WINDOW_DATA = 24;
   }
   optional LayerType type = 5;
@@ -1400,6 +1410,7 @@ message V1LayerParameter {
   optional ResidualQuantizationParameter residual_quantization_param = 49;
   optional WeightPlusParameter weight_plus_param = 50;
   optional CoshQuantizationLossParameter cosh_quantization_loss_param = 51;
+  optional LnormLossParameter lnorm_loss_param = 52;
   
   optional V0LayerParameter layer = 1;
 }

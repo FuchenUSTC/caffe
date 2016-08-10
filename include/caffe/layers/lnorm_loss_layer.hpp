@@ -1,5 +1,5 @@
-#ifndef CAFFE_COSH_QUANTIZATION_LOSS_LAYER_HPP_
-#define CAFFE_COSH_QUANTIZATION_LOSS_LAYER_HPP_
+#ifndef CAFFE_LNORM_LOSS_LAYER_HPP
+#define CAFFE_LNORM_LOSS_LAYER_HPP
 
 #include <vector>
 
@@ -10,35 +10,38 @@
 #include "caffe/layers/loss_layer.hpp"
 
 namespace caffe{
+
 /*
-** @ brief to model the hashing quantization loss
-**   log(cosh(|z|-1))
-**   Added by Fuchen Long in 8/9/2016
+** @ brief to model the L2 Loss
+**   for the quantization loss modeling
+**   Added by Fuchen Long in 8/10/2016
 */
 
 template <typename Dtype>
-class CoshQuantizationLossLayer : public LossLayer<Dtype>{
+class LnormLossLayer : public LossLayer<Dtype>{
 public:
-	explicit CoshQuantizationLossLayer(const LayerParameter& param)
+	explicit LnormLossLayer(const LayerParameter& param)
 		: LossLayer<Dtype>(param){}
 	virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
 		const vector<Blob<Dtype>*>& top);
 	virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
 		const vector<Blob<Dtype>*>& top);
-	virtual inline const char* type() const { return "CoshQuantizationLoss"; }
+	virtual inline const char* type() const { return "LnormLoss"; }
 	virtual inline int ExactNumBottomBlobs() const { return 1; }
 	virtual inline int ExactNumTopBlobs() const { return 1; }
 
 protected:
-	// copydoc CoshQuantization loss
+	// copydoc LnormLossLayer loss
 	virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
 		const vector<Blob<Dtype>*>& top);
 	virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
 		const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+
 	int dim_;
 	int batch_;
-	bool sigmoid_flag_;
+	Blob<Dtype> diff_meta_;
 };
 }// namespace caffe
+
 
 #endif
