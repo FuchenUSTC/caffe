@@ -415,6 +415,7 @@ message LayerParameter {
   optional CoshQuantizationLossParameter cosh_quantization_loss_param = 159;
   optional LnormLossParameter lnorm_loss_param = 160;
   optional PairWiseCrossEntropyLossParameter pairwise_cross_entropy_loss_param = 161;
+  optional TripletCrossEntropyLossParameter triplet_cross_entropy_loss_param = 162;
 }
 
 // Message that stores parameters used to apply transformation
@@ -1214,6 +1215,14 @@ message PairWiseCrossEntropyLossParameter{
   optional float lamda = 1 [default = 1];
 }
 
+// Message that stores paramter used by TripletCrossEntropyLossLayer
+message TripletCrossEntropyLossParameter{
+  // dim
+  optional int32 dim = 1 [default = 12];
+  // lamda
+  optional float lamda = 2 [default = 1];
+}
+
 // Message that stores parameters used by SoftmaxLayer, SoftmaxWithLossLayer
 message SoftmaxParameter {
   enum Engine {
@@ -1365,6 +1374,7 @@ message V1LayerParameter {
 	COSH_QUANTIZATION_LOSS = 48;
 	LNORM_LOSS = 49;
 	PAIRWISE_CROSS_ENTROPY_LOSS=50;
+	TRIPLET_CROSS_ENTROPY_LOSS=51;
     WINDOW_DATA = 24;
   }
   optional LayerType type = 5;
@@ -1420,6 +1430,7 @@ message V1LayerParameter {
   optional CoshQuantizationLossParameter cosh_quantization_loss_param = 51;
   optional LnormLossParameter lnorm_loss_param = 52;
   optional PairWiseCrossEntropyLossParameter pairwise_cross_entropy_loss_param = 53;
+  optional TripletCrossEntropyLossParameter triplet_cross_entropy_loss_param = 54;
   
   optional V0LayerParameter layer = 1;
 }
