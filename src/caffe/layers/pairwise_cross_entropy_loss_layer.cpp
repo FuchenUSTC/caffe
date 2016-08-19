@@ -50,7 +50,7 @@ void PairWiseCrossEntropyLossLayer<Dtype>::Forward_cpu(
 		caffe_cpu_gemv(CblasNoTrans, 1, dim_, Dtype(1.0), bottom_data_1 + offset,
 			bottom_data_2 + offset, Dtype(0.0), inner_mutable_data + n);
 		Dtype inner = inner_product_.cpu_data()[n];
-		pairwise_loss += (log(1 + inner) - label_data[n] * inner);
+		pairwise_loss += (log(1 + exp(inner)) - label_data[n] * inner);
 	}
 
 	top[0]->mutable_cpu_data()[0] = pairwise_loss / batch_;
@@ -78,8 +78,8 @@ void PairWiseCrossEntropyLossLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>
 			caffe_copy(dim_, bottom_data_2 + offset, meta_g_1_.mutable_cpu_data()); // inverse
 			caffe_copy(dim_, bottom_data_1 + offset, meta_g_2_.mutable_cpu_data());
 
-			caffe_scal(dim_, inner / (Dtype(1.0) + inner), gradient_1_.mutable_cpu_data());
-			caffe_scal(dim_, inner / (Dtype(1.0) + inner), gradient_2_.mutable_cpu_data());
+			caffe_scal(dim_, exp(inner) / (Dtype(1.0) + exp(inner)), gradient_1_.mutable_cpu_data());
+			caffe_scal(dim_, exp(inner) / (Dtype(1.0) + exp(inner)), gradient_2_.mutable_cpu_data());
 
 			caffe_scal(dim_, label_data[n], meta_g_1_.mutable_cpu_data());
 			caffe_scal(dim_, label_data[n], meta_g_2_.mutable_cpu_data());
@@ -87,8 +87,8 @@ void PairWiseCrossEntropyLossLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>
 			caffe_sub(dim_, gradient_1_.cpu_data(), meta_g_1_.cpu_data(), bottom_diff_1 + offset);
 			caffe_sub(dim_, gradient_2_.cpu_data(), meta_g_2_.cpu_data(), bottom_diff_2 + offset);
 		}
-		caffe_scal(dim_*batch_, Dtype(2.0), bottom_diff_1);
-		caffe_scal(dim_*batch_, Dtype(2.0), bottom_diff_2);
+		caffe_scal(dim_*batch_, Dtype(2.0)/batch_, bottom_diff_1);
+		caffe_scal(dim_*batch_, Dtype(2.0)/batch_, bottom_diff_2);
 	}
 }
 
