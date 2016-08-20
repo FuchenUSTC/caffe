@@ -34,14 +34,20 @@ protected:
 		const vector<Blob<Dtype>*>& top);
 	virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
 		const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-	void quantization_add_forward_cpu(const Dtype* code, const Dtype* loss,
+	void quantization_add_forward_cpu_sig(const Dtype* code, const Dtype* loss,
 		Dtype* res_code);
-	void quantization_add_backward_cpu(const Dtype* code, const Dtype* loss,
+	void quantization_add_forward_cpu_tanh(const Dtype* code, const Dtype* loss,
+		Dtype* res_code);
+	void quantization_add_backward_cpu_sig(const Dtype* code, const Dtype* loss,
+		const Dtype* top_diff, const Dtype* res_code,
+		Dtype* code_diff, Dtype* loss_diff);
+	void quantization_add_backward_cpu_tanh(const Dtype* code, const Dtype* loss,
 		const Dtype* top_diff, const Dtype* res_code,
 		Dtype* code_diff, Dtype* loss_diff);
 
 	int batch_;
 	int dim_;
+	bool sigmoid_flag_;
 };
 }// namespace caffe
 

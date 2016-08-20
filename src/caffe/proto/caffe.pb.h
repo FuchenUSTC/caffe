@@ -8870,16 +8870,26 @@ class ResidualQuantizationParameter : public ::google::protobuf::Message {
   inline float lamda() const;
   inline void set_lamda(float value);
 
+  // optional bool sigmoid_flag = 2 [default = true];
+  inline bool has_sigmoid_flag() const;
+  inline void clear_sigmoid_flag();
+  static const int kSigmoidFlagFieldNumber = 2;
+  inline bool sigmoid_flag() const;
+  inline void set_sigmoid_flag(bool value);
+
   // @@protoc_insertion_point(class_scope:caffe.ResidualQuantizationParameter)
  private:
   inline void set_has_lamda();
   inline void clear_has_lamda();
+  inline void set_has_sigmoid_flag();
+  inline void clear_has_sigmoid_flag();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
   float lamda_;
+  bool sigmoid_flag_;
   friend void  protobuf_AddDesc_caffe_2eproto();
   friend void protobuf_AssignDesc_caffe_2eproto();
   friend void protobuf_ShutdownFile_caffe_2eproto();
@@ -22980,6 +22990,30 @@ inline void ResidualQuantizationParameter::set_lamda(float value) {
   set_has_lamda();
   lamda_ = value;
   // @@protoc_insertion_point(field_set:caffe.ResidualQuantizationParameter.lamda)
+}
+
+// optional bool sigmoid_flag = 2 [default = true];
+inline bool ResidualQuantizationParameter::has_sigmoid_flag() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ResidualQuantizationParameter::set_has_sigmoid_flag() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ResidualQuantizationParameter::clear_has_sigmoid_flag() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ResidualQuantizationParameter::clear_sigmoid_flag() {
+  sigmoid_flag_ = true;
+  clear_has_sigmoid_flag();
+}
+inline bool ResidualQuantizationParameter::sigmoid_flag() const {
+  // @@protoc_insertion_point(field_get:caffe.ResidualQuantizationParameter.sigmoid_flag)
+  return sigmoid_flag_;
+}
+inline void ResidualQuantizationParameter::set_sigmoid_flag(bool value) {
+  set_has_sigmoid_flag();
+  sigmoid_flag_ = value;
+  // @@protoc_insertion_point(field_set:caffe.ResidualQuantizationParameter.sigmoid_flag)
 }
 
 // -------------------------------------------------------------------

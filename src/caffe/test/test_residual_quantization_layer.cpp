@@ -29,7 +29,7 @@ protected:
 		Dtype* bottom_loss = blob_bottom_loss_->mutable_cpu_data();
 		std::srand(time(NULL));
 		for (int i = 0; i < 12*128; ++i) {
-			bottom_code[i] = (std::rand() % 100000)*0.00001;
+			bottom_code[i] = (std::rand() % 100000)*0.00001 - 1;
 			bottom_loss[i] = (std::rand() % 100000)*0.00001;
 		}
 		blob_bottom_vec_.push_back(blob_bottom_code_);
@@ -75,6 +75,7 @@ TYPED_TEST(ResidualQuantizationLayerTest, TestGradient){
 	ResidualQuantizationParameter* res_param =
 		layer_param.mutable_residual_quantization_param();
 	res_param->set_lamda(1.0);
+	res_param->set_sigmoid_flag(false);
 	ResidualQuantizationLayer<Dtype> layer(layer_param);
 	layer.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
 	GradientChecker<Dtype> checker(1e-5, 1e-2);

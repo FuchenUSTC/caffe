@@ -1181,6 +1181,8 @@ message OrthogonalConstraintLossParameter{
 message ResidualQuantizationParameter{
   // lamda for default
   optional float lamda = 1 [default = 1];
+  // sigmoid flag
+  optional bool sigmoid_flag = 2 [default = true];
 }
 
 // Message that stores parameters used by WeightPlusLayer

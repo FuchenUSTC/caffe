@@ -14,6 +14,7 @@ template <typename Dtype>
 void ResidualQuantizationLayer<Dtype>::LayerSetUp(
 	const vector<Blob<Dtype>*>& bottom,
 	const vector<Blob<Dtype>*>& top){
+	sigmoid_flag_ = this->layer_param_.residual_quantization_param().sigmoid_flag();
 	batch_ = bottom[0]->num();
 	dim_ = bottom[0]->channels();
 	CHECK_EQ(bottom[1]->num(), batch_)
@@ -23,7 +24,7 @@ void ResidualQuantizationLayer<Dtype>::LayerSetUp(
 }
 
 template <typename Dtype>
-void ResidualQuantizationLayer<Dtype>::quantization_add_forward_cpu(
+void ResidualQuantizationLayer<Dtype>::quantization_add_forward_cpu_sig(
 	const Dtype* code, const Dtype* loss,
 	Dtype* res_code){
 	for (int pos = 0; pos < batch_*dim_; ++pos){
@@ -34,7 +35,18 @@ void ResidualQuantizationLayer<Dtype>::quantization_add_forward_cpu(
 }
 
 template <typename Dtype>
-void ResidualQuantizationLayer<Dtype>::quantization_add_backward_cpu(
+void ResidualQuantizationLayer<Dtype>::quantization_add_forward_cpu_tanh(
+	const Dtype* code, const Dtype* loss, Dtype* res_code){
+	for (int pos = 0; pos < batch_*dim_; ++pos){
+		if (code[pos] > 0)
+			res_code[pos] = std::min(Dtype(1.0), code[pos] + loss[pos]);
+		else res_code[pos] = std::max(Dtype(-1.0), code[pos] - loss[pos]);
+	}
+}
+
+
+template <typename Dtype>
+void ResidualQuantizationLayer<Dtype>::quantization_add_backward_cpu_sig(
 	const Dtype* code, const Dtype* loss,
 	const Dtype* top_diff,const Dtype* res_code,
 	Dtype* code_diff, Dtype* loss_diff){
@@ -63,6 +75,35 @@ void ResidualQuantizationLayer<Dtype>::quantization_add_backward_cpu(
 }
 
 template <typename Dtype>
+void ResidualQuantizationLayer<Dtype>::quantization_add_backward_cpu_tanh(
+	const Dtype* code, const Dtype*  loss,
+	const Dtype* top_diff, const Dtype* res_code,
+	Dtype* code_diff, Dtype* loss_diff){
+	for (int pos = 0; pos < batch_*dim_; ++pos){
+		if (code[pos] > 0){
+			if (res_code[pos] < 1){
+				code_diff[pos] = top_diff[pos];
+				loss_diff[pos] = top_diff[pos];
+			}
+			else{
+				code_diff[pos] = Dtype(0.0);
+				loss_diff[pos] = Dtype(0.0);
+			}
+		}
+		else{
+			if (res_code[pos] > -1){
+				code_diff[pos] = top_diff[pos];
+				loss_diff[pos] = -top_diff[pos];
+			}
+			else{
+				code_diff[pos] = Dtype(0.0);
+				loss_diff[pos] = Dtype(0.0);
+			}
+		}
+	}
+}
+
+template <typename Dtype>
 void ResidualQuantizationLayer<Dtype>::Forward_cpu(
 	const vector<Blob<Dtype>*>& bottom,
 	const vector<Blob<Dtype>*>& top){
@@ -70,7 +111,11 @@ void ResidualQuantizationLayer<Dtype>::Forward_cpu(
 	const Dtype* bottom_loss = bottom[1]->cpu_data(); // quantization loss
 	Dtype* top_data = top[0]->mutable_cpu_data(); // add the qunatiztion loss hash code
 	vector<int> top_shape = top[0]->shape();
-	quantization_add_forward_cpu(bottom_code, bottom_loss, top_data);
+	if (sigmoid_flag_)
+		quantization_add_forward_cpu_sig(bottom_code, bottom_loss, top_data);
+	else
+		quantization_add_forward_cpu_tanh(bottom_code, bottom_loss, top_data);
+
 }
 
 template <typename Dtype>
@@ -83,10 +128,17 @@ void ResidualQuantizationLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& 
 	const Dtype* top_data = top[0]->cpu_data();
 	Dtype* bottom_code_diff = bottom[0]->mutable_cpu_diff();
 	Dtype* bottom_loss_diff = bottom[1]->mutable_cpu_diff();
-	quantization_add_backward_cpu(bottom_code, bottom_loss, 
-		top_diff,top_data,
+	if (sigmoid_flag_)
+		quantization_add_backward_cpu_sig(bottom_code, bottom_loss,
+		top_diff, top_data,
+		bottom_code_diff, bottom_loss_diff);
+	else
+		quantization_add_backward_cpu_tanh(bottom_code, bottom_loss,
+		top_diff, top_data,
 		bottom_code_diff, bottom_loss_diff);
 }
+
+
 
 
 INSTANTIATE_CLASS(ResidualQuantizationLayer);
