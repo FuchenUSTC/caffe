@@ -76,6 +76,7 @@ TYPED_TEST(ResidualQuantizationLayerTest, TestGradient){
 		layer_param.mutable_residual_quantization_param();
 	res_param->set_lamda(1.0);
 	res_param->set_sigmoid_flag(false);
+	res_param->set_lamda(2.0);
 	ResidualQuantizationLayer<Dtype> layer(layer_param);
 	layer.SetUp(this->blob_bottom_vec_, this->blob_top_vec_);
 	GradientChecker<Dtype> checker(1e-5, 1e-2);

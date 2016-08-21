@@ -15,6 +15,7 @@ void ResidualQuantizationLayer<Dtype>::LayerSetUp(
 	const vector<Blob<Dtype>*>& bottom,
 	const vector<Blob<Dtype>*>& top){
 	sigmoid_flag_ = this->layer_param_.residual_quantization_param().sigmoid_flag();
+	lamda_ = this->layer_param_.residual_quantization_param().lamda();
 	batch_ = bottom[0]->num();
 	dim_ = bottom[0]->channels();
 	CHECK_EQ(bottom[1]->num(), batch_)
@@ -39,8 +40,8 @@ void ResidualQuantizationLayer<Dtype>::quantization_add_forward_cpu_tanh(
 	const Dtype* code, const Dtype* loss, Dtype* res_code){
 	for (int pos = 0; pos < batch_*dim_; ++pos){
 		if (code[pos] > 0)
-			res_code[pos] = std::min(Dtype(1.0), code[pos] + loss[pos]);
-		else res_code[pos] = std::max(Dtype(-1.0), code[pos] - loss[pos]);
+			res_code[pos] = std::min(Dtype(1.0), code[pos] + loss[pos] / lamda_);
+		else res_code[pos] = std::max(Dtype(-1.0), code[pos] - loss[pos] / lamda_);
 	}
 }
 
@@ -83,7 +84,7 @@ void ResidualQuantizationLayer<Dtype>::quantization_add_backward_cpu_tanh(
 		if (code[pos] > 0){
 			if (res_code[pos] < 1){
 				code_diff[pos] = top_diff[pos];
-				loss_diff[pos] = top_diff[pos];
+				loss_diff[pos] = top_diff[pos] / lamda_;
 			}
 			else{
 				code_diff[pos] = Dtype(0.0);
@@ -93,7 +94,7 @@ void ResidualQuantizationLayer<Dtype>::quantization_add_backward_cpu_tanh(
 		else{
 			if (res_code[pos] > -1){
 				code_diff[pos] = top_diff[pos];
-				loss_diff[pos] = -top_diff[pos];
+				loss_diff[pos] = -top_diff[pos] / lamda_;
 			}
 			else{
 				code_diff[pos] = Dtype(0.0);

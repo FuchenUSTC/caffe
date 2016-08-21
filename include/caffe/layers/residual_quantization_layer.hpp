@@ -48,6 +48,7 @@ protected:
 	int batch_;
 	int dim_;
 	bool sigmoid_flag_;
+	Dtype lamda_;// for the scal of residual
 };
 }// namespace caffe
 
